@@ -38,6 +38,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please fill in all required fields.' }, { status: 400 })
     }
 
+    // Email required
+    const emailRegexCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!data.submitterEmail?.trim() || !emailRegexCheck.test(data.submitterEmail.trim())) {
+      return NextResponse.json({ error: 'A valid email address is required to receive database access.' }, { status: 400 })
+    }
+
     // Salary validation — strip $ and commas before parsing
     const salaryRaw = String(data.annualBaseSalary).replace(/[$,]/g, '')
     const salary = parseInt(salaryRaw) || 0

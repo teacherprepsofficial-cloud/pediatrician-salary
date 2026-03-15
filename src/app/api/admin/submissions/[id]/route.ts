@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { connectDB } from '@/lib/mongodb'
 import { Submission } from '@/lib/models/Submission'
 import { User } from '@/lib/models/User'
-import { sendApprovalEmail } from '@/lib/email'
+import { sendApprovalEmail, sendAccountSetupEmail } from '@/lib/email'
 
 function isAuthorized(request: Request): boolean {
   const secret = request.headers.get('x-admin-secret')
@@ -27,20 +28,33 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   // If approved, upgrade the linked user to 'pro' and send notification
   if (status === 'approved' && submission) {
-    const user = await User.findOne({ submissionId: submission._id })
+    const email = submission.submitterEmail?.toLowerCase().trim()
+
+    // Find existing user by submissionId or email
+    let user = await User.findOne({ submissionId: submission._id })
+    if (!user && email) {
+      user = await User.findOne({ email })
+    }
+
     if (user) {
+      // Existing account — upgrade to pro
       user.tier = 'pro'
+      if (!user.submissionId) user.submissionId = submission._id
       await user.save()
       try { await sendApprovalEmail(user.email) } catch (e) { console.error('Approval email failed:', e) }
-    } else if (submission.submitterEmail) {
-      // Try matching by email in case submission was linked by email
-      const userByEmail = await User.findOne({ email: submission.submitterEmail.toLowerCase() })
-      if (userByEmail) {
-        userByEmail.tier = 'pro'
-        if (!userByEmail.submissionId) userByEmail.submissionId = submission._id
-        await userByEmail.save()
-        try { await sendApprovalEmail(userByEmail.email) } catch (e) { console.error('Approval email failed:', e) }
-      }
+    } else if (email) {
+      // No account yet — create one and send setup email
+      const token = crypto.randomBytes(32).toString('hex')
+      const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+      const newUser = await User.create({
+        email,
+        tier: 'pro',
+        submissionId: submission._id,
+        resetToken: token,
+        resetTokenExpiry: expiry,
+        emailVerified: false,
+      })
+      try { await sendAccountSetupEmail(newUser.email, token) } catch (e) { console.error('Setup email failed:', e) }
     }
   }
 
