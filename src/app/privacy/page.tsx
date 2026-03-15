@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>Cookies</h2>
         <p>We use only essential cookies required for the site to function. We do not use advertising or tracking cookies.</p>
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>Contact</h2>
-        <p>Questions? Email <a href="mailto:support@pediatriciansalary.com" style={{ color: '#1e5f8e' }}>support@pediatriciansalary.com</a></p>
+        <p>Questions? Email <a href="mailto:thejacksonhennessy@gmail.com" style={{ color: '#1e5f8e' }}>thejacksonhennessy@gmail.com</a></p>
       </div>
     </div>
   )

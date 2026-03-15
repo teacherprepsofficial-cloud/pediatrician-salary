@@ -12,7 +12,7 @@ export default function TermsPage() {
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>No Professional Advice</h2>
         <p>Nothing on this site constitutes professional, legal, or financial advice. Salary data is for informational purposes only.</p>
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>Contact</h2>
-        <p>Questions? Email <a href="mailto:support@pediatriciansalary.com" style={{ color: '#1e5f8e' }}>support@pediatriciansalary.com</a></p>
+        <p>Questions? Email <a href="mailto:thejacksonhennessy@gmail.com" style={{ color: '#1e5f8e' }}>thejacksonhennessy@gmail.com</a></p>
       </div>
     </div>
   )
