@@ -14,13 +14,6 @@ export default function AboutPage() {
           confidently and understand what fair pay looks like in their specialty and region.
         </p>
 
-        <p>
-          Pediatricians are among the lowest-paid physicians in medicine. Part of the reason is that
-          salary information is opaque — hospitals and employers benefit from that opacity.
-          We&apos;re changing that by building a community-sourced database of real salaries, submitted
-          anonymously by real pediatricians.
-        </p>
-
         <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#1a2332', marginTop: '0.5rem' }}>
           How submissions work
         </h2>
@@ -44,8 +37,8 @@ export default function AboutPage() {
         </h2>
         <p>
           Questions or feedback? Reach us at{' '}
-          <a href="mailto:support@pediatriciansalary.com" style={{ color: '#1e5f8e', fontWeight: 500 }}>
-            support@pediatriciansalary.com
+          <a href="mailto:thejacksonhennessy@gmail.com" style={{ color: '#1e5f8e', fontWeight: 500 }}>
+            thejacksonhennessy@gmail.com
           </a>
         </p>
 

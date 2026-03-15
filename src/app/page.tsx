@@ -90,7 +90,7 @@ export default async function HomePage() {
               maxWidth: '440px',
               textAlign: 'left',
             }}>
-              The first open salary database built by pediatricians, for pediatricians.
+              The first open salary database built specifically for pediatricians.
               Submit your compensation anonymously and help colleagues negotiate fair pay.
             </p>
 
@@ -101,8 +101,9 @@ export default async function HomePage() {
               <Link href="/salaries" className="btn btn-outline" style={{
                 fontSize: '0.95rem',
                 padding: '0.75rem 1.75rem',
-                borderColor: 'rgba(255,255,255,0.45)',
+                borderColor: 'rgba(255,255,255,0.7)',
                 color: 'white',
+                backgroundColor: 'rgba(255,255,255,0.1)',
               }}>
                 Browse Salaries
               </Link>
@@ -288,11 +289,11 @@ export default async function HomePage() {
               marginBottom: '0.75rem',
               letterSpacing: '-0.01em',
             }}>
-              Be the First to Contribute
+              Your Salary Helps the Whole Community
             </h2>
             <p style={{ color: '#3a2a00', fontSize: '1.05rem', marginBottom: '2rem', lineHeight: 1.6 }}>
-              The database grows with every submission. It takes 3 minutes and helps
-              the entire pediatrics community negotiate fairer salaries.
+              Once you submit, your data is reviewed and added to the database — where other
+              pediatricians can see what fair compensation actually looks like in their specialty and state.
             </p>
             <Link href="/submit" className="btn btn-secondary" style={{ fontSize: '1rem', padding: '0.875rem 2.25rem' }}>
               Submit Your Salary Now

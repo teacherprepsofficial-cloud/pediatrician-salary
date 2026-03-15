@@ -41,18 +41,6 @@ export function Header() {
       }}>
         {/* Logo */}
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <div style={{
-            width: '36px',
-            height: '36px',
-            backgroundColor: '#1e5f8e',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '1.1rem',
-          }}>
-            🩺
-          </div>
           <span style={{
             color: '#1a2332',
             fontWeight: 700,

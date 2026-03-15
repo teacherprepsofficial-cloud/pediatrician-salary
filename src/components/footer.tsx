@@ -18,15 +18,6 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-              <div style={{
-                width: '32px', height: '32px',
-                backgroundColor: '#e8a020',
-                borderRadius: '6px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1rem',
-              }}>
-                🩺
-              </div>
               <span style={{ color: 'white', fontWeight: 700, fontSize: '0.95rem' }}>
                 PediatricianSalary.com
               </span>
