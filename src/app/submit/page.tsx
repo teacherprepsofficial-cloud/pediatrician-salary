@@ -146,6 +146,75 @@ const INITIAL: FormData = {
   website: '',
 }
 
+// ── PillSelect ────────────────────────────────────────────────────────────────
+
+function PillSelect({
+  options,
+  value,
+  onChange,
+  searchable,
+  hasError,
+}: {
+  options: string[]
+  value: string
+  onChange: (v: string) => void
+  searchable?: boolean
+  hasError?: boolean
+}) {
+  const [query, setQuery] = useState('')
+  const filtered = searchable && query.trim()
+    ? options.filter(o => o.toLowerCase().includes(query.toLowerCase()))
+    : options
+
+  return (
+    <div>
+      {searchable && (
+        <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
+          <span style={{
+            position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)',
+            color: '#9aa5b0', pointerEvents: 'none', fontSize: '0.95rem',
+          }}>⌕</span>
+          <input
+            type="text"
+            className="form-input"
+            placeholder="Search…"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            style={{ paddingLeft: '2.25rem', fontSize: '0.9rem' }}
+          />
+        </div>
+      )}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+        {filtered.map(opt => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => onChange(opt)}
+            style={{
+              padding: '0.375rem 0.875rem',
+              borderRadius: '9999px',
+              border: `2px solid ${value === opt ? '#1e5f8e' : hasError ? '#fca5a5' : '#d0dde8'}`,
+              backgroundColor: value === opt ? '#1e5f8e' : 'white',
+              color: value === opt ? 'white' : '#1a2332',
+              fontWeight: value === opt ? 700 : 500,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              transition: 'all 0.12s ease',
+            }}
+          >
+            {opt}
+          </button>
+        ))}
+        {filtered.length === 0 && (
+          <p style={{ color: '#9aa5b0', fontSize: '0.875rem', padding: '0.25rem 0' }}>
+            No results for &quot;{query}&quot;
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── MoneyInput ────────────────────────────────────────────────────────────────
 
 function MoneyInput({ value, onChange, className, hasError }: {
@@ -420,32 +489,23 @@ function Step1({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="State" required error={errors.state}>
-        <select
-          className={`form-select${errors.state ? ' error' : ''}`}
+        <PillSelect
+          options={US_STATES}
           value={form.state}
-          onChange={e => set('state', e.target.value)}
-        >
-          <option value="">Choose</option>
-          {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
+          onChange={v => set('state', v)}
+          searchable
+          hasError={!!errors.state}
+        />
       </FormField>
 
       <FormField label="Rating of working at this hospital" required error={errors.rating}>
-        <div className="radio-group">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
-            <label key={n} className="radio-option">
-              <input
-                type="radio"
-                name="rating"
-                value={String(n)}
-                checked={form.rating === String(n)}
-                onChange={() => set('rating', String(n))}
-              />
-              {n}
-            </label>
-          ))}
-        </div>
-        <div style={{ fontSize: '0.8rem', color: '#5a6a7a', marginTop: '0.25rem' }}>
+        <PillSelect
+          options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
+          value={form.rating}
+          onChange={v => set('rating', v)}
+          hasError={!!errors.rating}
+        />
+        <div style={{ fontSize: '0.8rem', color: '#5a6a7a', marginTop: '0.5rem' }}>
           1 = Worst · 10 = Best
         </div>
       </FormField>
@@ -457,31 +517,22 @@ function Step2({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="Pediatrician Position / Specialty" required error={errors.specialty}>
-        <select
-          className={`form-select${errors.specialty ? ' error' : ''}`}
+        <PillSelect
+          options={SPECIALTIES}
           value={form.specialty}
-          onChange={e => set('specialty', e.target.value)}
-        >
-          <option value="">Choose</option>
-          {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
+          onChange={v => set('specialty', v)}
+          searchable
+          hasError={!!errors.specialty}
+        />
       </FormField>
 
       <FormField label="Current Career Stage" required error={errors.careerStage}>
-        <div className="radio-group">
-          {['Resident', 'Fellow', 'Attending'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="careerStage"
-                value={opt}
-                checked={form.careerStage === opt}
-                onChange={() => set('careerStage', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Resident', 'Fellow', 'Attending']}
+          value={form.careerStage}
+          onChange={v => set('careerStage', v)}
+          hasError={!!errors.careerStage}
+        />
       </FormField>
     </>
   )
@@ -499,20 +550,12 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Did you receive a Sign-on or Relocation Bonus?" required error={errors.receivedSignOnBonus}>
-        <div className="radio-group">
-          {['Yes', 'No'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="receivedSignOnBonus"
-                value={opt}
-                checked={form.receivedSignOnBonus === opt}
-                onChange={() => set('receivedSignOnBonus', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Yes', 'No']}
+          value={form.receivedSignOnBonus}
+          onChange={v => set('receivedSignOnBonus', v)}
+          hasError={!!errors.receivedSignOnBonus}
+        />
       </FormField>
 
       <FormField label="If Yes: How much?">
@@ -523,37 +566,21 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Are you eligible for Productivity or Incentive Bonuses?" required error={errors.productivityBonus}>
-        <div className="radio-group">
-          {['Yes - RVU based', 'Yes - Quality based', 'No'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="productivityBonus"
-                value={opt}
-                checked={form.productivityBonus === opt}
-                onChange={() => set('productivityBonus', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Yes - RVU based', 'Yes - Quality based', 'No']}
+          value={form.productivityBonus}
+          onChange={v => set('productivityBonus', v)}
+          hasError={!!errors.productivityBonus}
+        />
       </FormField>
 
       <FormField label="Do you have Moonlighting or Side-gig income options?" required error={errors.hasMoonlighting}>
-        <div className="radio-group">
-          {['Yes', 'No'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="hasMoonlighting"
-                value={opt}
-                checked={form.hasMoonlighting === opt}
-                onChange={() => set('hasMoonlighting', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Yes', 'No']}
+          value={form.hasMoonlighting}
+          onChange={v => set('hasMoonlighting', v)}
+          hasError={!!errors.hasMoonlighting}
+        />
       </FormField>
 
       <FormField label="If Yes: Approximate annual moonlighting income?">
@@ -570,20 +597,12 @@ function Step4({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="FTE Status" required error={errors.fteStatus}>
-        <div className="radio-group">
-          {['1.0 Full Time', '<1.0 Part Time'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="fteStatus"
-                value={opt}
-                checked={form.fteStatus === opt}
-                onChange={() => set('fteStatus', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['1.0 Full Time', '<1.0 Part Time']}
+          value={form.fteStatus}
+          onChange={v => set('fteStatus', v)}
+          hasError={!!errors.fteStatus}
+        />
       </FormField>
 
       <FormField label="Average Clinical Hours Per Week">
@@ -610,14 +629,12 @@ function Step4({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Total Years Working in this Role" required error={errors.yearsInRole}>
-        <select
-          className={`form-select${errors.yearsInRole ? ' error' : ''}`}
+        <PillSelect
+          options={YEARS_IN_ROLE}
           value={form.yearsInRole}
-          onChange={e => set('yearsInRole', e.target.value)}
-        >
-          <option value="">Choose</option>
-          {YEARS_IN_ROLE.map(y => <option key={y} value={y}>{y}</option>)}
-        </select>
+          onChange={v => set('yearsInRole', v)}
+          hasError={!!errors.yearsInRole}
+        />
       </FormField>
     </>
   )
@@ -627,65 +644,36 @@ function Step5({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="Is this position PSLF Eligible?">
-        <div className="radio-group">
-          {['Yes', 'No', 'Unsure'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="pslfEligible"
-                value={opt}
-                checked={form.pslfEligible === opt}
-                onChange={() => set('pslfEligible', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Yes', 'No', 'Unsure']}
+          value={form.pslfEligible}
+          onChange={v => set('pslfEligible', v)}
+        />
       </FormField>
 
       <FormField label="Practice Setting" required error={errors.practiceSetting}>
-        <select
-          className={`form-select${errors.practiceSetting ? ' error' : ''}`}
+        <PillSelect
+          options={PRACTICE_SETTINGS}
           value={form.practiceSetting}
-          onChange={e => set('practiceSetting', e.target.value)}
-        >
-          <option value="">Choose</option>
-          {PRACTICE_SETTINGS.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
+          onChange={v => set('practiceSetting', v)}
+          hasError={!!errors.practiceSetting}
+        />
       </FormField>
 
       <FormField label="(For Residents/Fellows Only) Do you receive a Housing Stipend?">
-        <div className="radio-group">
-          {['Yes', 'No'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="housingStipend"
-                value={opt}
-                checked={form.housingStipend === opt}
-                onChange={() => set('housingStipend', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Yes', 'No']}
+          value={form.housingStipend}
+          onChange={v => set('housingStipend', v)}
+        />
       </FormField>
 
       <FormField label="(For Residents/Fellows Only) Is your program Unionized?">
-        <div className="radio-group">
-          {['Yes', 'No'].map(opt => (
-            <label key={opt} className="radio-option">
-              <input
-                type="radio"
-                name="programUnionized"
-                value={opt}
-                checked={form.programUnionized === opt}
-                onChange={() => set('programUnionized', opt)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
+        <PillSelect
+          options={['Yes', 'No']}
+          value={form.programUnionized}
+          onChange={v => set('programUnionized', v)}
+        />
       </FormField>
     </>
   )
