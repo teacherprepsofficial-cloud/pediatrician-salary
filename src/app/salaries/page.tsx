@@ -4,15 +4,13 @@ import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { SalaryCard } from '@/components/SalaryCard'
 
-const STORAGE_KEY = 'peds_access_email'
+type User = { email: string; tier: 'none' | 'pro' | 'paid' } | null
 
 export default function SalariesPage() {
-  const [email, setEmail] = useState('')
-  const [accessGranted, setAccessGranted] = useState(false)
+  const [user, setUser] = useState<User>(null)
+  const [authLoading, setAuthLoading] = useState(true)
   const [salaries, setSalaries] = useState<Record<string, unknown>[]>([])
   const [loading, setLoading] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
 
   // ── Filters ────────────────────────────────────────────────────────────────
   const [search, setSearch] = useState('')
@@ -21,13 +19,16 @@ export default function SalariesPage() {
   const [filterStage, setFilterStage] = useState('')
   const [filterSetting, setFilterSetting] = useState('')
 
-  // Check if already unlocked
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      setAccessGranted(true)
-      fetchSalaries()
-    }
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+        setUser(d.user || null)
+        if (d.user && (d.user.tier === 'pro' || d.user.tier === 'paid')) {
+          fetchSalaries()
+        }
+      })
+      .finally(() => setAuthLoading(false))
   }, [])
 
   async function fetchSalaries() {
@@ -37,35 +38,9 @@ export default function SalariesPage() {
       const data = await res.json()
       setSalaries(data.salaries || [])
     } catch {
-      // silently fail — empty list shown
+      // silently fail
     } finally {
       setLoading(false)
-    }
-  }
-
-  async function handleUnlock(e: React.FormEvent) {
-    e.preventDefault()
-    const normalized = email.toLowerCase().trim()
-    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)
-    if (!valid) { setError('Please enter a valid email address.'); return }
-
-    setSubmitting(true)
-    setError('')
-
-    try {
-      await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: normalized }),
-      })
-      // Save locally even if already subscribed — just grant access
-      localStorage.setItem(STORAGE_KEY, normalized)
-      setAccessGranted(true)
-      fetchSalaries()
-    } catch {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setSubmitting(false)
     }
   }
 
@@ -108,109 +83,77 @@ export default function SalariesPage() {
     setFilterSetting('')
   }
 
-  // ── Email gate ────────────────────────────────────────────────────────────
-  if (!accessGranted) {
+  // ── Auth loading ──────────────────────────────────────────────────────────
+  if (authLoading) {
+    return <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#5a6a7a' }}>Loading…</div>
+  }
+
+  // ── No access gate ────────────────────────────────────────────────────────
+  const hasAccess = user && (user.tier === 'pro' || user.tier === 'paid')
+
+  if (!hasAccess) {
     return (
       <div style={{
-        minHeight: '80vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem 1.25rem',
+        minHeight: '80vh', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', padding: '2rem 1.25rem',
         background: 'linear-gradient(160deg, #f0f5fa 0%, #e4edf5 100%)',
       }}>
         <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          border: '1px solid #d0dde8',
+          backgroundColor: 'white', borderRadius: '16px', border: '1px solid #d0dde8',
           boxShadow: '0 8px 40px rgba(30,95,142,0.10)',
-          padding: 'clamp(2rem, 5vw, 3rem)',
-          maxWidth: '480px',
-          width: '100%',
-          textAlign: 'center',
+          padding: 'clamp(2rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center',
         }}>
-          {/* Icon */}
           <div style={{
-            width: '64px', height: '64px',
-            backgroundColor: '#e8f1f8',
-            borderRadius: '50%',
+            width: '64px', height: '64px', backgroundColor: '#e8f1f8', borderRadius: '50%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 1.5rem',
-            fontSize: '1.75rem',
-          }}>
-            📊
-          </div>
+            margin: '0 auto 1.5rem', fontSize: '1.75rem',
+          }}>📊</div>
 
-          <h1 style={{
-            fontSize: 'clamp(1.4rem, 4vw, 1.85rem)',
-            fontWeight: 800,
-            color: '#1a2332',
-            letterSpacing: '-0.02em',
-            marginBottom: '0.75rem',
-          }}>
+          <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 1.85rem)', fontWeight: 800, color: '#1a2332', letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
             Access the Salary Database
           </h1>
 
-          <p style={{
-            color: '#5a6a7a',
-            fontSize: '1rem',
-            lineHeight: 1.7,
-            marginBottom: '0.5rem',
-          }}>
-            Enter your email to browse real pediatrician salary data — submitted anonymously by pediatricians across the US.
-          </p>
+          {user && user.tier === 'none' ? (
+            <>
+              <p style={{ color: '#5a6a7a', fontSize: '1rem', lineHeight: 1.7, marginBottom: '2rem' }}>
+                Your submission is under review. You&apos;ll get full access and an email notification once it&apos;s approved.
+              </p>
+              <Link href="/pricing" className="btn btn-secondary" style={{ fontSize: '0.95rem' }}>
+                Get Instant Access →
+              </Link>
+            </>
+          ) : (
+            <>
+              <p style={{ color: '#5a6a7a', fontSize: '1rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
+                Submit a salary to earn free access, or purchase one-time access to browse all submissions.
+              </p>
+              <p style={{ color: '#9aa5b0', fontSize: '0.82rem', marginBottom: '2rem' }}>
+                100% anonymous. Reviewed before publishing.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <Link href="/submit" className="btn btn-primary" style={{ fontSize: '0.95rem' }}>
+                  Submit Your Salary — Get Free Access
+                </Link>
+                <Link href="/pricing" style={{ color: '#1e5f8e', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
+                  Or purchase access for $100 →
+                </Link>
+                {!user && (
+                  <p style={{ fontSize: '0.82rem', color: '#9aa5b0', marginTop: '0.25rem' }}>
+                    Already have an account?{' '}
+                    <Link href="/login?redirect=/salaries" style={{ color: '#1e5f8e', fontWeight: 600, textDecoration: 'none' }}>
+                      Log in
+                    </Link>
+                  </p>
+                )}
+              </div>
+            </>
+          )}
 
-          <p style={{
-            color: '#9aa5b0',
-            fontSize: '0.82rem',
-            marginBottom: '2rem',
-          }}>
-            Free. No password. No spam.
-          </p>
-
-          <form onSubmit={handleUnlock} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <input
-              type="email"
-              className="form-input"
-              placeholder="your@email.com"
-              value={email}
-              onChange={e => { setEmail(e.target.value); setError('') }}
-              style={{ textAlign: 'center', fontSize: '1rem' }}
-              autoFocus
-            />
-            {error && (
-              <p style={{ color: '#dc2626', fontSize: '0.85rem', margin: 0 }}>{error}</p>
-            )}
-            <button
-              type="submit"
-              className="btn btn-secondary"
-              disabled={submitting}
-              style={{ width: '100%', opacity: submitting ? 0.7 : 1 }}
-            >
-              {submitting ? 'Unlocking…' : 'View Salaries →'}
-            </button>
-          </form>
-
-          <div style={{
-            marginTop: '2rem',
-            paddingTop: '1.5rem',
-            borderTop: '1px solid #e8eff6',
-            display: 'flex',
-            gap: '1.5rem',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-          }}>
+          <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #e8eff6', display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Proof label="100% Anonymous" />
             <Proof label="Pediatrician-Submitted" />
-            <Proof label="Free Access" />
+            <Proof label="Reviewed & Verified" />
           </div>
-
-          <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: '#9aa5b0' }}>
-            Want to contribute?{' '}
-            <Link href="/submit" style={{ color: '#1e5f8e', fontWeight: 600, textDecoration: 'none' }}>
-              Submit your salary
-            </Link>
-          </p>
         </div>
       </div>
     )
