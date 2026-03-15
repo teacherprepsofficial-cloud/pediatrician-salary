@@ -81,8 +81,8 @@ export default function PricingPage() {
         </div>
 
         {/* 2. Submit Salary */}
-        <div style={{ backgroundColor: 'white', border: '2px solid #16a34a', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#16a34a', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+        <div style={{ backgroundColor: 'white', border: '2px solid #8C1A4A', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#8C1A4A', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             For existing pediatricians
           </div>
           <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
@@ -92,22 +92,22 @@ export default function PricingPage() {
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
             {['Get a free membership by submitting your salary', 'Browse all salary submissions'].map(item => (
               <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
-                <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
+                <span style={{ color: '#8C1A4A', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
               </li>
             ))}
           </ul>
           {hasAccess && user?.tier === 'pro' ? (
             <div style={{ textAlign: 'center', color: '#16a34a', fontWeight: 700, fontSize: '0.9rem' }}>✓ You have Pro access</div>
           ) : (
-            <Link href="/submit" className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center', borderColor: '#16a34a', color: '#16a34a' }}>
+            <Link href="/submit" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
               Submit Your Salary
             </Link>
           )}
         </div>
 
         {/* 3. Buy Access */}
-        <div style={{ backgroundColor: 'white', border: '2px solid #8C1A4A', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#8C1A4A', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+        <div style={{ backgroundColor: 'white', border: '2px solid #B8860B', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#B8860B', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
             For future pediatricians
           </div>
           <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
@@ -120,7 +120,7 @@ export default function PricingPage() {
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
             {['Full database access for 1 year', 'Browse all salary submissions', 'Filter by specialty, state, career stage', 'Access expires after 12 months'].map(item => (
               <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
-                <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
+                <span style={{ color: '#B8860B', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
               </li>
             ))}
           </ul>
@@ -130,8 +130,8 @@ export default function PricingPage() {
             <div style={{ textAlign: 'center', color: '#9aa5b0', fontSize: '0.875rem' }}>You already have access</div>
           ) : (
             <>
-              <button onClick={handleBuy} disabled={loading || !userLoaded} className="btn btn-primary" style={{ width: '100%', opacity: (loading || !userLoaded) ? 0.7 : 1 }}>
-                {loading ? 'Redirecting to checkout…' : 'Buy Access — $100'}
+              <button onClick={handleBuy} disabled={loading || !userLoaded} style={{ width: '100%', opacity: (loading || !userLoaded) ? 0.7 : 1, backgroundColor: '#B8860B', color: 'white', fontWeight: 700, padding: '0.75rem 1.25rem', borderRadius: '6px', border: '2px solid #B8860B', cursor: 'pointer', fontSize: '1rem' }}>
+                {loading ? 'Redirecting to checkout…' : 'Get Access Now'}
               </button>
               {error && <p style={{ color: '#dc2626', fontSize: '0.82rem', marginTop: '0.5rem', textAlign: 'center' }}>{error}</p>}
               <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.75rem' }}>No account required. Pay and get instant access.</p>
