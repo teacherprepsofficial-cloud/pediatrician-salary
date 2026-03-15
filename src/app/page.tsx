@@ -101,10 +101,9 @@ export default async function HomePage() {
               <Link href="/salaries" className="btn btn-outline" style={{
                 fontSize: '0.95rem',
                 padding: '0.75rem 1.75rem',
-                borderColor: 'rgba(255,255,255,0.7)',
+                borderColor: '#B8860B',
                 color: 'white',
                 backgroundColor: '#B8860B',
-              borderColor: '#B8860B',
               }}>
                 Browse Salaries
               </Link>
