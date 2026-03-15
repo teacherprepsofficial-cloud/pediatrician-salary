@@ -173,12 +173,12 @@ export default function SalariesPage() {
           {/* 2. Submit Your Salary */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
-            border: '2px solid #16a34a', padding: '1.75rem',
+            border: '2px solid #8C1A4A', padding: '1.75rem',
             display: 'flex', flexDirection: 'column', position: 'relative',
           }}>
             <div style={{
               position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
-              backgroundColor: '#16a34a', color: 'white', fontWeight: 700,
+              backgroundColor: '#8C1A4A', color: 'white', fontWeight: 700,
               fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
               letterSpacing: '0.05em', whiteSpace: 'nowrap',
             }}>For existing pediatricians</div>
@@ -188,7 +188,7 @@ export default function SalariesPage() {
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
               Share your salary anonymously and get <strong>permanent free access</strong> once approved.
             </p>
-            <Link href="/submit" className="btn btn-secondary" style={{ textAlign: 'center', display: 'block' }}>
+            <Link href="/submit" className="btn btn-primary" style={{ textAlign: 'center', display: 'block' }}>
               Submit a Salary
             </Link>
           </div>
@@ -196,12 +196,12 @@ export default function SalariesPage() {
           {/* 3. Buy Access */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
-            border: '2px solid #8C1A4A', padding: '1.75rem',
+            border: '2px solid #B8860B', padding: '1.75rem',
             display: 'flex', flexDirection: 'column', position: 'relative',
           }}>
             <div style={{
               position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
-              backgroundColor: '#8C1A4A', color: 'white', fontWeight: 700,
+              backgroundColor: '#B8860B', color: 'white', fontWeight: 700,
               fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
               letterSpacing: '0.05em', whiteSpace: 'nowrap',
             }}>For future pediatricians</div>
@@ -211,8 +211,8 @@ export default function SalariesPage() {
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
               Instant access to the full database for 12 months. No account required.
             </p>
-            <Link href="/pricing" className="btn btn-primary" style={{ textAlign: 'center', display: 'block' }}>
-              Buy Access — $100
+            <Link href="/pricing" style={{ textAlign: 'center', display: 'block', backgroundColor: '#B8860B', color: 'white', fontWeight: 700, padding: '0.75rem 1.25rem', borderRadius: '6px', textDecoration: 'none', fontSize: '1rem' }}>
+              Get Access Now
             </Link>
           </div>
         </div>
