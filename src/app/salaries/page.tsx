@@ -142,7 +142,7 @@ export default function SalariesPage() {
         {/* Three columns */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
           gap: '1.25rem',
           width: '100%',
           maxWidth: '820px',
