@@ -150,13 +150,16 @@ export default function SalariesPage() {
           {/* 1. Log In */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
-            border: '1px solid #d0dde8', padding: '1.75rem',
-            display: 'flex', flexDirection: 'column',
+            border: '2px solid #1e5f8e', padding: '1.75rem',
+            display: 'flex', flexDirection: 'column', position: 'relative',
           }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              Welcome back!
-            </p>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+            <div style={{
+              position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
+              backgroundColor: '#1e5f8e', color: 'white', fontWeight: 700,
+              fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
+              letterSpacing: '0.05em', whiteSpace: 'nowrap',
+            }}>Welcome back!</div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
               Log in
             </h2>
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
@@ -170,13 +173,16 @@ export default function SalariesPage() {
           {/* 2. Submit Your Salary */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
-            border: '2px solid #1e5f8e', padding: '1.75rem',
-            display: 'flex', flexDirection: 'column',
+            border: '2px solid #16a34a', padding: '1.75rem',
+            display: 'flex', flexDirection: 'column', position: 'relative',
           }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              For existing pediatricians
-            </p>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+            <div style={{
+              position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
+              backgroundColor: '#16a34a', color: 'white', fontWeight: 700,
+              fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
+              letterSpacing: '0.05em', whiteSpace: 'nowrap',
+            }}>For existing pediatricians</div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
               Submit your salary
             </h2>
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
@@ -190,13 +196,16 @@ export default function SalariesPage() {
           {/* 3. Buy Access */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
-            border: '1px solid #d0dde8', padding: '1.75rem',
-            display: 'flex', flexDirection: 'column',
+            border: '2px solid #8C1A4A', padding: '1.75rem',
+            display: 'flex', flexDirection: 'column', position: 'relative',
           }}>
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C1A4A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              For future pediatricians
-            </p>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+            <div style={{
+              position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
+              backgroundColor: '#8C1A4A', color: 'white', fontWeight: 700,
+              fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
+              letterSpacing: '0.05em', whiteSpace: 'nowrap',
+            }}>For future pediatricians</div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
               Get full access
             </h2>
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
