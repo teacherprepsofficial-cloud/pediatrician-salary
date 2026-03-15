@@ -171,14 +171,8 @@ export default function SalariesPage() {
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
             border: '2px solid #1e5f8e', padding: '1.75rem',
-            display: 'flex', flexDirection: 'column', position: 'relative',
+            display: 'flex', flexDirection: 'column',
           }}>
-            <div style={{
-              position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
-              backgroundColor: '#1e5f8e', color: 'white', fontWeight: 700,
-              fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
-              letterSpacing: '0.05em', whiteSpace: 'nowrap',
-            }}>RECOMMENDED</div>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
               For existing pediatricians
             </p>
