@@ -58,11 +58,15 @@ input, select, textarea {
   padding: 0.75rem 1.75rem;
   font-weight: 600;
   font-size: 0.95rem;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   min-height: 48px;
   cursor: pointer;
   touch-action: manipulation;
   letter-spacing: 0.01em;
+}
+
+.btn:hover {
+  transform: scale(1.04);
 }
 
 .btn-primary {
@@ -290,7 +294,7 @@ input, select, textarea {
 }
 
 @media (hover: none) {
-  .btn:hover { opacity: 1; }
+  .btn:hover { transform: none; }
   .salary-card:hover { box-shadow: none; }
 }
 
