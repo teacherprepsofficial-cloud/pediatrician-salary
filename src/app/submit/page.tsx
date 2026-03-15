@@ -115,6 +115,7 @@ type FormData = {
   programUnionized: string
   // Section 6
   additionalComments: string
+  submitterEmail: string
   // honeypot
   website: string
 }
@@ -141,6 +142,7 @@ const INITIAL: FormData = {
   housingStipend: '',
   programUnionized: '',
   additionalComments: '',
+  submitterEmail: '',
   website: '',
 }
 
@@ -669,12 +671,35 @@ function Step6({ form, errors: _errors, set }: StepProps) {
       <FormField label="Additional Comments">
         <textarea
           className="form-textarea"
-          placeholder="Your answer"
+          placeholder="Anything else you'd like to share about your compensation or work environment?"
           value={form.additionalComments}
           onChange={e => set('additionalComments', e.target.value)}
-          rows={5}
+          rows={4}
         />
       </FormField>
+
+      <div style={{
+        backgroundColor: '#f0f5fa',
+        borderRadius: '10px',
+        padding: '1.25rem',
+        border: '1px solid #d0dde8',
+      }}>
+        <FormField
+          label="Your Email Address"
+          hint="Required to access the salary database. Never shared or made public."
+        >
+          <input
+            type="email"
+            className="form-input"
+            placeholder="your@email.com"
+            value={form.submitterEmail}
+            onChange={e => set('submitterEmail', e.target.value)}
+          />
+        </FormField>
+        <p style={{ fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.5rem' }}>
+          By submitting your email you&apos;ll get instant access to all salary data — no separate sign-up needed.
+        </p>
+      </div>
     </>
   )
 }
@@ -685,11 +710,13 @@ function FormField({
   label,
   required,
   error,
+  hint,
   children,
 }: {
   label: string
   required?: boolean
   error?: string
+  hint?: string
   children: React.ReactNode
 }) {
   return (
@@ -699,11 +726,14 @@ function FormField({
         fontWeight: 600,
         fontSize: '0.975rem',
         color: '#1a2332',
-        marginBottom: '0.75rem',
+        marginBottom: hint ? '0.25rem' : '0.75rem',
       }}>
         {label}
         {required && <span style={{ color: '#dc2626', marginLeft: '0.25rem' }}>*</span>}
       </label>
+      {hint && (
+        <p style={{ fontSize: '0.82rem', color: '#5a6a7a', marginBottom: '0.75rem' }}>{hint}</p>
+      )}
       {children}
       {error && (
         <div style={{

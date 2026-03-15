@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongodb'
 import { Submission } from '@/lib/models/Submission'
+import { Subscriber } from '@/lib/models/Subscriber'
 import { rateLimit, getIP } from '@/lib/rate-limit'
 import { sanitize } from '@/lib/sanitize'
 
@@ -90,8 +91,19 @@ export async function POST(request: Request) {
       housingStipend:          sanitize(data.housingStipend || '').slice(0, 10),
       programUnionized:        sanitize(data.programUnionized || '').slice(0, 10),
       additionalComments:      sanitize(data.additionalComments || '').slice(0, 5000),
+      submitterEmail:          sanitize(data.submitterEmail || '').slice(0, 254).toLowerCase(),
       status:                  'pending',
     })
+
+    // Also add to subscriber list if email provided
+    if (data.submitterEmail) {
+      const normalized = String(data.submitterEmail).toLowerCase().trim()
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (emailRegex.test(normalized)) {
+        const existing = await Subscriber.findOne({ email: normalized })
+        if (!existing) await Subscriber.create({ email: normalized })
+      }
+    }
 
     return NextResponse.json({ message: 'Submission received' })
   } catch (err) {

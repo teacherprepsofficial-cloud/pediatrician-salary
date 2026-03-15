@@ -22,6 +22,7 @@ const SubmissionSchema = new Schema({
   housingStipend:          { type: String, default: '' },
   programUnionized:        { type: String, default: '' },
   additionalComments:      { type: String, default: '' },
+  submitterEmail:          { type: String, default: '' },
   status:                  { type: String, default: 'pending' }, // pending | approved | rejected
   submittedAt:             { type: Date, default: Date.now },
 })
