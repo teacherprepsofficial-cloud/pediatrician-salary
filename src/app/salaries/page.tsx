@@ -92,68 +92,112 @@ export default function SalariesPage() {
   const hasAccess = user && (user.tier === 'pro' || user.tier === 'paid')
 
   if (!hasAccess) {
-    return (
-      <div style={{
-        minHeight: '80vh', display: 'flex', alignItems: 'center',
-        justifyContent: 'center', padding: '2rem 1.25rem',
-        background: 'linear-gradient(160deg, #f0f5fa 0%, #e4edf5 100%)',
-      }}>
+    // Logged in but pending review
+    if (user && user.tier === 'none') {
+      return (
         <div style={{
-          backgroundColor: 'white', borderRadius: '16px', border: '1px solid #d0dde8',
-          boxShadow: '0 8px 40px rgba(30,95,142,0.10)',
-          padding: 'clamp(2rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center',
+          minHeight: '80vh', display: 'flex', alignItems: 'center',
+          justifyContent: 'center', padding: '2rem 1.25rem',
+          background: 'linear-gradient(160deg, #f0f5fa 0%, #e4edf5 100%)',
         }}>
           <div style={{
-            width: '64px', height: '64px', backgroundColor: '#e8f1f8', borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 1.5rem', fontSize: '1.75rem',
-          }}>📊</div>
+            backgroundColor: 'white', borderRadius: '16px', border: '1px solid #d0dde8',
+            boxShadow: '0 8px 40px rgba(30,95,142,0.10)',
+            padding: 'clamp(2rem, 5vw, 3rem)', maxWidth: '480px', width: '100%', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⏳</div>
+            <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.75rem' }}>
+              Your submission is under review
+            </h1>
+            <p style={{ color: '#5a6a7a', fontSize: '1rem', lineHeight: 1.7, marginBottom: '2rem' }}>
+              You&apos;ll get an email and full access once it&apos;s approved — usually within 24–48 hours.
+              Need access now?
+            </p>
+            <Link href="/pricing" className="btn btn-primary" style={{ fontSize: '0.95rem' }}>
+              Get Instant Access for $100 →
+            </Link>
+          </div>
+        </div>
+      )
+    }
 
-          <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 1.85rem)', fontWeight: 800, color: '#1a2332', letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
+    // Unauthenticated — show two-column gate
+    return (
+      <div style={{
+        minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center',
+        justifyContent: 'center', padding: '3rem 1.25rem',
+        background: 'linear-gradient(160deg, #f0f5fa 0%, #e4edf5 100%)',
+      }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📊</div>
+          <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, color: '#1a2332', letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>
             Access the Salary Database
           </h1>
+          <p style={{ color: '#5a6a7a', fontSize: '1rem', maxWidth: '420px', margin: '0 auto', lineHeight: 1.6 }}>
+            Real salaries submitted anonymously by pediatricians across the US.
+          </p>
+        </div>
 
-          {user && user.tier === 'none' ? (
-            <>
-              <p style={{ color: '#5a6a7a', fontSize: '1rem', lineHeight: 1.7, marginBottom: '2rem' }}>
-                Your submission is under review. You&apos;ll get full access and an email notification once it&apos;s approved.
-              </p>
-              <Link href="/pricing" className="btn btn-secondary" style={{ fontSize: '0.95rem' }}>
-                Get Instant Access →
-              </Link>
-            </>
-          ) : (
-            <>
-              <p style={{ color: '#5a6a7a', fontSize: '1rem', lineHeight: 1.7, marginBottom: '0.5rem' }}>
-                Submit a salary to earn free access, or purchase one-time access to browse all submissions.
-              </p>
-              <p style={{ color: '#9aa5b0', fontSize: '0.82rem', marginBottom: '2rem' }}>
-                100% anonymous. Reviewed before publishing.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <Link href="/submit" className="btn btn-primary" style={{ fontSize: '0.95rem' }}>
-                  Submit Your Salary — Get Free Access
-                </Link>
-                <Link href="/pricing" style={{ color: '#1e5f8e', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}>
-                  Or purchase access for $100 →
-                </Link>
-                {!user && (
-                  <p style={{ fontSize: '0.82rem', color: '#9aa5b0', marginTop: '0.25rem' }}>
-                    Already have an account?{' '}
-                    <Link href="/login?redirect=/salaries" style={{ color: '#1e5f8e', fontWeight: 600, textDecoration: 'none' }}>
-                      Log in
-                    </Link>
-                  </p>
-                )}
-              </div>
-            </>
-          )}
-
-          <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #e8eff6', display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Proof label="100% Anonymous" />
-            <Proof label="Pediatrician-Submitted" />
-            <Proof label="Reviewed & Verified" />
+        {/* Two columns */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: '1.25rem',
+          width: '100%',
+          maxWidth: '640px',
+        }}>
+          {/* Already have an account */}
+          <div style={{
+            backgroundColor: 'white', borderRadius: '14px',
+            border: '2px solid #1e5f8e', padding: '1.75rem',
+            display: 'flex', flexDirection: 'column',
+          }}>
+            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+              Have an account
+            </p>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+              Welcome back
+            </h2>
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
+              Log in to access the salary database with your existing account.
+            </p>
+            <Link href="/login?redirect=/salaries" className="btn btn-secondary" style={{ textAlign: 'center', display: 'block' }}>
+              Log In
+            </Link>
           </div>
+
+          {/* New here */}
+          <div style={{
+            backgroundColor: 'white', borderRadius: '14px',
+            border: '1px solid #d0dde8', padding: '1.75rem',
+            display: 'flex', flexDirection: 'column',
+          }}>
+            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C1A4A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+              New here
+            </p>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+              Get access
+            </h2>
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.25rem', flexGrow: 1 }}>
+              Submit your salary for <strong>free permanent access</strong>, or pay $100 for 12 months.
+            </p>
+            <Link href="/submit" className="btn btn-primary" style={{ textAlign: 'center', display: 'block', marginBottom: '0.625rem' }}>
+              Submit a Salary — Free
+            </Link>
+            <Link href="/pricing" style={{
+              display: 'block', textAlign: 'center', color: '#1e5f8e',
+              fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none',
+            }}>
+              Or buy access for $100 →
+            </Link>
+          </div>
+        </div>
+
+        <div style={{ marginTop: '2rem', display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Proof label="100% Anonymous" />
+          <Proof label="Pediatrician-Submitted" />
+          <Proof label="Reviewed & Verified" />
         </div>
       </div>
     )
