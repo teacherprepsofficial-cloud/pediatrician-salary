@@ -146,6 +146,41 @@ const INITIAL: FormData = {
   website: '',
 }
 
+// ── StarRating ────────────────────────────────────────────────────────────────
+
+function StarRating({ value, onChange, hasError }: { value: string; onChange: (v: string) => void; hasError?: boolean }) {
+  const [hovered, setHovered] = useState(0)
+  const selected = parseInt(value) || 0
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '0.25rem' }}>
+        {[1,2,3,4,5,6,7,8,9,10].map(n => (
+          <button
+            key={n}
+            type="button"
+            onMouseEnter={() => setHovered(n)}
+            onMouseLeave={() => setHovered(0)}
+            onClick={() => onChange(String(n))}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: '0.1rem',
+              fontSize: 'clamp(1.4rem, 3vw, 1.75rem)',
+              color: n <= (hovered || selected) ? '#B8860B' : hasError ? '#fca5a5' : '#d0dde8',
+              transition: 'color 0.1s ease',
+              lineHeight: 1,
+            }}
+            aria-label={`Rate ${n}`}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+      <div style={{ fontSize: '0.8rem', color: '#5a6a7a', marginTop: '0.5rem' }}>
+        1 = Worst · 10 = Best{selected > 0 && <span style={{ marginLeft: '0.75rem', fontWeight: 600, color: '#B8860B' }}>{selected} / 10</span>}
+      </div>
+    </div>
+  )
+}
+
 // ── SelectInput ───────────────────────────────────────────────────────────────
 
 function SelectInput({
@@ -466,15 +501,7 @@ function Step1({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Rating of working at this hospital" required error={errors.rating}>
-        <SelectInput
-          options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
-          value={form.rating}
-          onChange={v => set('rating', v)}
-          hasError={!!errors.rating}
-        />
-        <div style={{ fontSize: '0.8rem', color: '#5a6a7a', marginTop: '0.5rem' }}>
-          1 = Worst · 10 = Best
-        </div>
+        <StarRating value={form.rating} onChange={v => set('rating', v)} hasError={!!errors.rating} />
       </FormField>
     </>
   )
