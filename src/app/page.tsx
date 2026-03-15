@@ -57,8 +57,8 @@ export default async function HomePage() {
             <div style={{
               display: 'inline-block',
               alignSelf: 'flex-start',
-              backgroundColor: '#B8860B',
-              border: '1px solid #B8860B',
+              backgroundColor: 'transparent',
+              border: '1px solid rgba(255,255,255,0.5)',
               borderRadius: '9999px',
               padding: '0.375rem 1rem',
               fontSize: '0.82rem',
