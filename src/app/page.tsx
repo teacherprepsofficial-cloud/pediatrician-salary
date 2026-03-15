@@ -63,7 +63,7 @@ export default async function HomePage() {
               padding: '0.375rem 1rem',
               fontSize: '0.82rem',
               fontWeight: 600,
-              color: '#e8a0bf',
+              color: 'white',
               marginBottom: '1.5rem',
               letterSpacing: '0.03em',
             }}>

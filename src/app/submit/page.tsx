@@ -348,7 +348,7 @@ export default function SubmitPage() {
           Pediatrician Salary Database
         </h1>
         <p style={{ color: '#5a6a7a', marginTop: '0.5rem', fontSize: '0.95rem' }}>
-          All submissions are anonymous and reviewed before publishing.
+          All submissions are anonymous, reviewed before publishing, and provide complete access to the salary database upon approval.
         </p>
         <p style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.5rem', fontWeight: 500 }}>
           * Indicates required question
