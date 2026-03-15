@@ -57,8 +57,8 @@ export default async function HomePage() {
             <div style={{
               display: 'inline-block',
               alignSelf: 'flex-start',
-              backgroundColor: 'rgba(140, 26, 74, 0.2)',
-              border: '1px solid rgba(140, 26, 74, 0.4)',
+              backgroundColor: '#B8860B',
+              border: '1px solid #B8860B',
               borderRadius: '9999px',
               padding: '0.375rem 1rem',
               fontSize: '0.82rem',
@@ -103,7 +103,8 @@ export default async function HomePage() {
                 padding: '0.75rem 1.75rem',
                 borderColor: 'rgba(255,255,255,0.7)',
                 color: 'white',
-                backgroundColor: 'rgba(255,255,255,0.1)',
+                backgroundColor: '#B8860B',
+              borderColor: '#B8860B',
               }}>
                 Browse Salaries
               </Link>
@@ -277,7 +278,7 @@ export default async function HomePage() {
         />
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, #8C1A4A 0%, #701538 100%)',
+          background: 'linear-gradient(135deg, #B8860B 0%, #9a6f09 100%)',
           padding: '3.5rem 1.25rem',
           textAlign: 'center',
         }}>
@@ -285,7 +286,7 @@ export default async function HomePage() {
             <h2 style={{
               fontSize: 'clamp(1.4rem, 3vw, 1.9rem)',
               fontWeight: 800,
-              color: '#1a2332',
+              color: 'white',
               marginBottom: '0.75rem',
               letterSpacing: '-0.01em',
             }}>
@@ -295,7 +296,7 @@ export default async function HomePage() {
               Once you submit, your data is reviewed and added to the database — where other
               pediatricians can see what fair compensation actually looks like in their specialty and state.
             </p>
-            <Link href="/submit" className="btn btn-secondary" style={{ fontSize: '1rem', padding: '0.875rem 2.25rem' }}>
+            <Link href="/submit" className="btn btn-primary" style={{ fontSize: '1rem', padding: '0.875rem 2.25rem' }}>
               Submit Your Salary Now
             </Link>
           </div>
