@@ -17,14 +17,21 @@ export async function GET() {
       return NextResponse.json({ user: null })
     }
 
+    // If paid tier but paidUntil has passed, treat as no access
+    let tier = user.tier
+    if (tier === 'paid' && user.paidUntil && new Date(user.paidUntil) < new Date()) {
+      tier = 'none'
+    }
+
     return NextResponse.json({
       user: {
         userId: String(user._id),
         email: user.email,
-        tier: user.tier,
+        tier,
         emailVerified: user.emailVerified,
         createdAt: user.createdAt,
         submissionId: user.submissionId,
+        paidUntil: user.paidUntil,
       }
     })
   } catch (err) {

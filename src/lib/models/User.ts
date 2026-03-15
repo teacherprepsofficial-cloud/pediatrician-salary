@@ -10,6 +10,9 @@ export interface IUser extends Document {
   resetToken: string | null
   resetTokenExpiry: Date | null
   submissionId: mongoose.Types.ObjectId | null
+  paidUntil: Date | null
+  stripeCustomerId: string | null
+  stripePaymentId: string | null
   createdAt: Date
 }
 
@@ -23,6 +26,9 @@ const UserSchema = new Schema<IUser>({
   resetToken: { type: String, default: null },
   resetTokenExpiry: { type: Date, default: null },
   submissionId: { type: Schema.Types.ObjectId, ref: 'Submission', default: null },
+  paidUntil: { type: Date, default: null },
+  stripeCustomerId: { type: String, default: null },
+  stripePaymentId: { type: String, default: null },
   createdAt: { type: Date, default: Date.now },
 })
 
