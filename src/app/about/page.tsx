@@ -9,7 +9,7 @@ export default function AboutPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', color: '#374151', fontSize: '1rem', lineHeight: 1.8 }}>
         <p>
-          PediatricianSalary.com is a free, open salary database built by physicians, for physicians.
+          PediatricianSalary.com is a free, open salary database built by pediatricians, for pediatricians.
           Our goal is simple: give pediatricians access to real compensation data so they can negotiate
           confidently and understand what fair pay looks like in their specialty and region.
         </p>

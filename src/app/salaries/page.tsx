@@ -111,7 +111,7 @@ export default function SalariesPage() {
             lineHeight: 1.7,
             marginBottom: '0.5rem',
           }}>
-            Enter your email to browse real pediatrician salary data — submitted anonymously by physicians across the US.
+            Enter your email to browse real pediatrician salary data — submitted anonymously by pediatricians across the US.
           </p>
 
           <p style={{
@@ -155,7 +155,7 @@ export default function SalariesPage() {
             flexWrap: 'wrap',
           }}>
             <Proof label="100% Anonymous" />
-            <Proof label="Physician-Submitted" />
+            <Proof label="Pediatrician-Submitted" />
             <Proof label="Free Access" />
           </div>
 
@@ -178,7 +178,7 @@ export default function SalariesPage() {
           Pediatrician Salaries
         </h1>
         <p style={{ color: '#5a6a7a', fontSize: '1rem' }}>
-          {loading ? 'Loading…' : `${salaries.length} ${salaries.length === 1 ? 'submission' : 'submissions'} from physicians across the US`}
+          {loading ? 'Loading…' : `${salaries.length} ${salaries.length === 1 ? 'submission' : 'submissions'} from pediatricians across the US`}
         </p>
       </div>
 

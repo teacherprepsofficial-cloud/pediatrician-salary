@@ -67,7 +67,7 @@ export default async function HomePage() {
               marginBottom: '1.5rem',
               letterSpacing: '0.03em',
             }}>
-              100% Anonymous · Physician-Submitted Data
+              100% Anonymous · Pediatrician-Submitted Data
             </div>
 
             <h1 style={{
@@ -156,7 +156,7 @@ export default async function HomePage() {
               Real Pediatricians. Real Transparency.
             </h2>
             <p style={{ color: '#5a6a7a', fontSize: '1rem', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>
-              Every data point comes from a physician who took 3 minutes to help the entire community.
+              Every data point comes from a pediatrician who took 3 minutes to help the entire community.
             </p>
           </div>
 
@@ -194,7 +194,7 @@ export default async function HomePage() {
             How It Works
           </h2>
           <p style={{ textAlign: 'center', color: '#5a6a7a', marginBottom: '3rem', fontSize: '1.05rem' }}>
-            Built on transparency. Powered by physicians like you.
+            Built on transparency. Powered by pediatricians like you.
           </p>
 
           <div style={{
@@ -248,10 +248,10 @@ export default async function HomePage() {
                 Why Salary Transparency Matters in Pediatrics
               </h2>
               <p style={{ color: '#5a6a7a', marginBottom: '1.75rem', fontSize: '1rem', lineHeight: 1.7 }}>
-                Pediatricians are among the most underpaid physicians. Knowing the market gives you power.
+                Salary data is power. Know what your peers are earning so you can negotiate with confidence.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                <WhyCard icon="💼" title="Negotiate Better" desc="Walk into salary negotiations armed with real data from physicians in your specialty and state." />
+                <WhyCard icon="💼" title="Negotiate Better" desc="Walk into salary negotiations armed with real data from pediatricians in your specialty and state." />
                 <WhyCard icon="🏥" title="Compare Settings" desc="See how academic medicine, private practice, and community health center salaries really stack up." />
                 <WhyCard icon="📊" title="Track Market Trends" desc="As the database grows, you'll see how compensation shifts across specialties over time." />
               </div>

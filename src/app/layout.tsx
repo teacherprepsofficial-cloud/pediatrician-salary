@@ -5,7 +5,7 @@ import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
   title: 'Pediatrician Salary Database | Real Salaries from Real Pediatricians',
-  description: 'Browse real pediatrician salary data submitted anonymously by physicians across the US. Compare salaries by specialty, state, and practice setting.',
+  description: 'Browse real pediatrician salary data submitted anonymously by pediatricians across the US. Compare salaries by specialty, state, and practice setting.',
   openGraph: {
     title: 'Pediatrician Salary Database',
     description: 'Real salary data submitted anonymously by pediatricians across the US.',
