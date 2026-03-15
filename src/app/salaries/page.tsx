@@ -11,6 +11,14 @@ export default function SalariesPage() {
   const [authLoading, setAuthLoading] = useState(true)
   const [salaries, setSalaries] = useState<Record<string, unknown>[]>([])
   const [loading, setLoading] = useState(false)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+
+  async function goToCheckout() {
+    setCheckoutLoading(true)
+    const res = await fetch('/api/stripe/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+    const data = await res.json()
+    if (data.url) { window.location.href = data.url } else { setCheckoutLoading(false) }
+  }
 
   // ── Filters ────────────────────────────────────────────────────────────────
   const [search, setSearch] = useState('')
@@ -211,9 +219,9 @@ export default function SalariesPage() {
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
               Instant access to the full database for 12 months. No account required.
             </p>
-            <Link href="/pricing" style={{ textAlign: 'center', display: 'block', backgroundColor: '#B8860B', color: 'white', fontWeight: 700, padding: '0.75rem 1.25rem', borderRadius: '6px', textDecoration: 'none', fontSize: '1rem' }}>
-              Get Access Now
-            </Link>
+            <button onClick={goToCheckout} disabled={checkoutLoading} style={{ width: '100%', backgroundColor: '#B8860B', color: 'white', fontWeight: 700, padding: '0.75rem 1.25rem', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: checkoutLoading ? 0.7 : 1 }}>
+              {checkoutLoading ? 'Redirecting…' : 'Get Access Now'}
+            </button>
           </div>
         </div>
 

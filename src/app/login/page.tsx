@@ -13,6 +13,14 @@ function LoginForm() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+
+  async function goToCheckout() {
+    setCheckoutLoading(true)
+    const res = await fetch('/api/stripe/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+    const data = await res.json()
+    if (data.url) { window.location.href = data.url } else { setCheckoutLoading(false) }
+  }
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(
@@ -129,9 +137,9 @@ function LoginForm() {
           <Link href="/submit" style={{ color: '#8C1A4A', fontWeight: 700, textDecoration: 'none' }}>
             Submit your salary
           </Link>
-          <Link href="/pricing" style={{ color: '#B8860B', fontWeight: 700, textDecoration: 'none' }}>
-            Get full access
-          </Link>
+          <button onClick={goToCheckout} disabled={checkoutLoading} style={{ background: 'none', border: 'none', color: '#B8860B', fontWeight: 700, cursor: 'pointer', fontSize: '0.875rem', padding: 0 }}>
+            {checkoutLoading ? 'Redirecting…' : 'Get full access'}
+          </button>
         </div>
       </div>
     </div>
