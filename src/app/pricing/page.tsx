@@ -65,7 +65,7 @@ export default function PricingPage() {
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem' }}>Access with your existing account</p>
           </div>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
-            {['Full database access', 'Browse all salary submissions', 'Filter by specialty, state, career stage'].map(item => (
+            {['For existing members', 'Members who submitted salary', 'Members who purchased access'].map(item => (
               <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
                 <span style={{ color: '#1e5f8e', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
               </li>
@@ -86,11 +86,11 @@ export default function PricingPage() {
             For existing pediatricians
           </div>
           <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a2332', lineHeight: 1, marginBottom: '0.4rem' }}>Free</div>
+            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a2332', lineHeight: 1, marginBottom: '0.4rem' }}>Submit Your Salary</div>
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem' }}>Submit an approved salary</p>
           </div>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
-            {['Full database access — permanent', 'Browse all salary submissions', 'Filter by specialty, state, career stage', 'Contribute to salary transparency'].map(item => (
+            {['Get a free membership by submitting your salary', 'Browse all salary submissions'].map(item => (
               <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
                 <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
               </li>
