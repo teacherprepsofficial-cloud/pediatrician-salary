@@ -36,12 +36,11 @@ export async function POST(req: NextRequest) {
       const stripeCustomerId = session.customer as string
       const stripePaymentId = session.payment_intent as string
 
-      let user
       const userId = session.metadata?.userId
 
       if (userId) {
         // Logged-in user — upgrade by ID
-        user = await User.findByIdAndUpdate(userId, { tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId }, { new: false })
+        await User.findByIdAndUpdate(userId, { tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId })
       } else {
         // Guest buyer — find or create by email Stripe collected
         const email = session.customer_details?.email?.toLowerCase().trim()
@@ -49,19 +48,26 @@ export async function POST(req: NextRequest) {
           console.error('No email from Stripe guest checkout')
           return NextResponse.json({ received: true })
         }
-        user = await User.findOneAndUpdate(
-          { email },
-          { tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId },
-          { new: false, upsert: true }
-        )
-      }
 
-      // New guest account (no password) — send setup email
-      if (user && !user.passwordHash) {
-        const token = crypto.randomBytes(32).toString('hex')
-        const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
-        await User.findByIdAndUpdate(user._id, { resetToken: token, resetTokenExpiry: expiry })
-        await sendAccountSetupEmail(user.email, token).catch(e => console.error('Setup email failed:', e))
+        const existingUser = await User.findOne({ email })
+
+        if (existingUser) {
+          // Existing account — just upgrade
+          await User.findByIdAndUpdate(existingUser._id, { tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId })
+          // Send setup email if they never set a password
+          if (!existingUser.passwordHash) {
+            const token = crypto.randomBytes(32).toString('hex')
+            const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+            await User.findByIdAndUpdate(existingUser._id, { resetToken: token, resetTokenExpiry: expiry })
+            await sendAccountSetupEmail(existingUser.email, token).catch(e => console.error('Setup email failed:', e))
+          }
+        } else {
+          // Brand new guest — create account and send setup email
+          const token = crypto.randomBytes(32).toString('hex')
+          const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+          await User.create({ email, tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId, resetToken: token, resetTokenExpiry: expiry })
+          await sendAccountSetupEmail(email, token).catch(e => console.error('Setup email failed:', e))
+        }
       }
     } catch (err) {
       console.error('Failed to upgrade user after payment:', err)
