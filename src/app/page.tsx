@@ -54,7 +54,7 @@ export default async function HomePage() {
             flexDirection: 'column',
             justifyContent: 'center',
           }}>
-            <div style={{
+            <div className="hero-badge" style={{
               display: 'inline-block',
               alignSelf: 'flex-start',
               backgroundColor: 'transparent',
@@ -94,7 +94,7 @@ export default async function HomePage() {
               Submit your compensation anonymously and help colleagues negotiate fair pay.
             </p>
 
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div className="hero-buttons" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <Link href="/submit" className="btn btn-primary" style={{ fontSize: '0.95rem', padding: '0.75rem 1.75rem' }}>
                 Submit Your Salary
               </Link>

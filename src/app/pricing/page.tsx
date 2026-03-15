@@ -53,7 +53,7 @@ export default function PricingPage() {
       </div>
 
       {/* Pricing cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div className="three-col-grid" style={{ marginBottom: '3rem' }}>
 
         {/* 1. Log In */}
         <div style={{ backgroundColor: 'white', border: '2px solid #1e5f8e', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>

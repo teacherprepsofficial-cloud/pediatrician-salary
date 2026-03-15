@@ -344,6 +344,34 @@ input, select, textarea {
   }
 }
 
+/* ── Three-column pricing/gate grid ─────────────── */
+.three-col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .three-col-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* ── Hero buttons mobile ─────────────────────────── */
+@media (max-width: 640px) {
+  .hero-buttons {
+    flex-direction: column;
+  }
+  .hero-buttons a {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-badge {
+    font-size: 0.75rem !important;
+  }
+}
+
 /* ── Why it matters split ────────────────────────── */
 .why-split {
   display: grid;

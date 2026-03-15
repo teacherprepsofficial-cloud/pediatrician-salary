@@ -148,13 +148,7 @@ export default function SalariesPage() {
         </div>
 
         {/* Three columns */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-          gap: '1.25rem',
-          width: '100%',
-          maxWidth: '820px',
-        }}>
+        <div className="three-col-grid" style={{ width: '100%', maxWidth: '820px' }}>
           {/* 1. Log In */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
