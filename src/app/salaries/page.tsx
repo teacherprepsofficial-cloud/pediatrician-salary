@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { connectDB } from '@/lib/mongodb'
 import { Submission } from '@/lib/models/Submission'
+import { SalaryCard } from '@/components/SalaryCard'
 
 async function getApprovedSalaries() {
   try {
@@ -11,15 +12,6 @@ async function getApprovedSalaries() {
   }
 }
 
-function formatSalary(n: number) {
-  return '$' + n.toLocaleString()
-}
-
-function ratingColor(r: number) {
-  if (r >= 8) return '#16a34a'
-  if (r >= 5) return '#e8a020'
-  return '#dc2626'
-}
 
 export default async function SalariesPage() {
   const salaries = await getApprovedSalaries()
@@ -40,45 +32,7 @@ export default async function SalariesPage() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {salaries.map((s: Record<string, unknown>) => (
-            <div key={String(s._id)} className="salary-card">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#1a2332', marginBottom: '0.25rem' }}>
-                    {String(s.specialty)}
-                  </div>
-                  <div style={{ color: '#5a6a7a', fontSize: '0.875rem' }}>
-                    {String(s.hospitalName)} · {String(s.city)}, {String(s.state)}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1e5f8e' }}>
-                    {formatSalary(Number(s.annualBaseSalary))}
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: '#5a6a7a' }}>annual base salary</div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
-                <Tag label={String(s.careerStage)} />
-                <Tag label={String(s.fteStatus)} />
-                <Tag label={`${String(s.yearsInRole)} yr${String(s.yearsInRole) === '1' ? '' : 's'}`} />
-                {s.practiceSetting ? <Tag label={String(s.practiceSetting)} /> : null}
-                {s.productivityBonus && s.productivityBonus !== 'No' ? <Tag label={String(s.productivityBonus)} color="#e8f1f8" textColor="#1e5f8e" /> : null}
-                {s.pslfEligible === 'Yes' ? <Tag label="PSLF Eligible" color="#dcfce7" textColor="#16a34a" /> : null}
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.875rem', paddingTop: '0.875rem', borderTop: '1px solid #e8eff6' }}>
-                <span style={{ fontSize: '0.8rem', color: '#5a6a7a' }}>Hospital rating:</span>
-                <span style={{ fontWeight: 700, fontSize: '0.9rem', color: ratingColor(Number(s.rating)) }}>
-                  {String(s.rating)}/10
-                </span>
-                {s.receivedSignOnBonus === 'Yes' ? (
-                  <span style={{ marginLeft: 'auto', fontSize: '0.8rem', color: '#16a34a', fontWeight: 600 }}>
-                    ✓ Sign-on bonus
-                  </span>
-                ) : null}
-              </div>
-            </div>
+            <SalaryCard key={String(s._id)} s={s} />
           ))}
         </div>
       )}
@@ -86,20 +40,6 @@ export default async function SalariesPage() {
   )
 }
 
-function Tag({ label, color = '#f0f5fa', textColor = '#5a6a7a' }: { label: string; color?: string; textColor?: string }) {
-  return (
-    <span style={{
-      backgroundColor: color,
-      color: textColor,
-      fontSize: '0.78rem',
-      fontWeight: 600,
-      padding: '0.25rem 0.625rem',
-      borderRadius: '9999px',
-    }}>
-      {label}
-    </span>
-  )
-}
 
 function EmptyState() {
   return (
