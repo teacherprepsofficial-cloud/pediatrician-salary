@@ -139,57 +139,77 @@ export default function SalariesPage() {
           </p>
         </div>
 
-        {/* Two columns */}
+        {/* Three columns */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1.25rem',
           width: '100%',
-          maxWidth: '640px',
+          maxWidth: '820px',
         }}>
-          {/* Already have an account */}
+          {/* 1. Log In */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
-            border: '2px solid #1e5f8e', padding: '1.75rem',
+            border: '1px solid #d0dde8', padding: '1.75rem',
             display: 'flex', flexDirection: 'column',
           }}>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
               Have an account
             </p>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
-              Welcome back
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+              Log in
             </h2>
             <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
-              Log in to access the salary database with your existing account.
+              Access the database with your existing account.
             </p>
             <Link href="/login?redirect=/salaries" className="btn btn-secondary" style={{ textAlign: 'center', display: 'block' }}>
               Log In
             </Link>
           </div>
 
-          {/* New here */}
+          {/* 2. Submit Your Salary */}
+          <div style={{
+            backgroundColor: 'white', borderRadius: '14px',
+            border: '2px solid #1e5f8e', padding: '1.75rem',
+            display: 'flex', flexDirection: 'column', position: 'relative',
+          }}>
+            <div style={{
+              position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
+              backgroundColor: '#1e5f8e', color: 'white', fontWeight: 700,
+              fontSize: '0.7rem', padding: '0.25rem 0.875rem', borderRadius: '9999px',
+              letterSpacing: '0.05em', whiteSpace: 'nowrap',
+            }}>RECOMMENDED</div>
+            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+              Free
+            </p>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+              Submit your salary
+            </h2>
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
+              Share your salary anonymously and get <strong>permanent free access</strong> once approved.
+            </p>
+            <Link href="/submit" className="btn btn-secondary" style={{ textAlign: 'center', display: 'block' }}>
+              Submit a Salary
+            </Link>
+          </div>
+
+          {/* 3. Buy Access */}
           <div style={{
             backgroundColor: 'white', borderRadius: '14px',
             border: '1px solid #d0dde8', padding: '1.75rem',
             display: 'flex', flexDirection: 'column',
           }}>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C1A4A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              New here
+              $100 one-time
             </p>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
-              Get access
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
+              Get full access
             </h2>
-            <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.25rem', flexGrow: 1 }}>
-              Submit your salary for <strong>free permanent access</strong>, or pay $100 for 12 months.
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
+              Instant access to the full database for 12 months. No account required.
             </p>
-            <Link href="/submit" className="btn btn-primary" style={{ textAlign: 'center', display: 'block', marginBottom: '0.625rem' }}>
-              Submit a Salary — Free
-            </Link>
-            <Link href="/pricing" style={{
-              display: 'block', textAlign: 'center', color: '#1e5f8e',
-              fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none',
-            }}>
-              Or buy access for $100 →
+            <Link href="/pricing" className="btn btn-primary" style={{ textAlign: 'center', display: 'block' }}>
+              Buy Access — $100
             </Link>
           </div>
         </div>
