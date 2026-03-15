@@ -68,132 +68,102 @@ export default function PricingPage() {
         </h1>
         <p style={{ color: '#5a6a7a', fontSize: '1.05rem', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7 }}>
           Real salary data submitted anonymously by pediatricians across the US.
-          Two ways to get in.
+          Three ways to get in.
         </p>
       </div>
 
       {/* Pricing cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
 
-        {/* Free — Pro tier */}
-        <div style={{
-          backgroundColor: 'white', border: '2px solid #1e5f8e',
-          borderRadius: '16px', padding: '2rem', position: 'relative',
-        }}>
-          <div style={{
-            position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)',
-            backgroundColor: '#1e5f8e', color: 'white', fontWeight: 700,
-            fontSize: '0.75rem', padding: '0.3rem 1rem', borderRadius: '9999px',
-            letterSpacing: '0.05em', whiteSpace: 'nowrap',
-          }}>
-            RECOMMENDED
+        {/* 1. Log In */}
+        <div style={{ backgroundColor: 'white', border: '2px solid #1e5f8e', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#1e5f8e', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+            Welcome back!
           </div>
-
-          <div style={{ marginBottom: '1.5rem' }}>
-            <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>Pro</p>
-            <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#1a2332', lineHeight: 1 }}>Free</div>
-            <p style={{ color: '#5a6a7a', fontSize: '0.9rem', marginTop: '0.5rem' }}>Submit an approved salary</p>
+          <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
+            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a2332', lineHeight: 1, marginBottom: '0.4rem' }}>Log In</div>
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem' }}>Access with your existing account</p>
           </div>
+          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
+            {['Full database access', 'Browse all salary submissions', 'Filter by specialty, state, career stage'].map(item => (
+              <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
+                <span style={{ color: '#1e5f8e', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
+              </li>
+            ))}
+          </ul>
+          {hasAccess ? (
+            <div style={{ textAlign: 'center', color: '#16a34a', fontWeight: 700, fontSize: '0.9rem' }}>✓ You&apos;re logged in</div>
+          ) : (
+            <Link href="/login?redirect=/salaries" className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+              Log In
+            </Link>
+          )}
+        </div>
 
-          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-            {[
-              'Full database access — permanent',
-              'Browse all salary submissions',
-              'Filter by specialty, state, career stage',
-              'Contribute to salary transparency',
-            ].map(item => (
-              <li key={item} style={{ display: 'flex', gap: '0.625rem', fontSize: '0.9rem', color: '#374151' }}>
+        {/* 2. Submit Salary */}
+        <div style={{ backgroundColor: 'white', border: '2px solid #16a34a', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#16a34a', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+            For existing pediatricians
+          </div>
+          <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
+            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a2332', lineHeight: 1, marginBottom: '0.4rem' }}>Free</div>
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem' }}>Submit an approved salary</p>
+          </div>
+          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
+            {['Full database access — permanent', 'Browse all salary submissions', 'Filter by specialty, state, career stage', 'Contribute to salary transparency'].map(item => (
+              <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
                 <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
               </li>
             ))}
           </ul>
-
           {hasAccess && user?.tier === 'pro' ? (
             <div style={{ textAlign: 'center', color: '#16a34a', fontWeight: 700, fontSize: '0.9rem' }}>✓ You have Pro access</div>
           ) : (
-            <Link href="/submit" className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <Link href="/submit" className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center', borderColor: '#16a34a', color: '#16a34a' }}>
               Submit Your Salary
             </Link>
           )}
         </div>
 
-        {/* Paid tier */}
-        <div style={{
-          backgroundColor: 'white', border: '1px solid #d0dde8',
-          borderRadius: '16px', padding: '2rem',
-        }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#8C1A4A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>Paid</p>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.25rem' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#1a2332', lineHeight: 1 }}>$100</span>
-              <span style={{ color: '#5a6a7a', fontSize: '0.9rem', marginBottom: '0.35rem' }}>one-time</span>
-            </div>
-            <p style={{ color: '#5a6a7a', fontSize: '0.9rem', marginTop: '0.5rem' }}>12 months access, then expires</p>
+        {/* 3. Buy Access */}
+        <div style={{ backgroundColor: 'white', border: '2px solid #8C1A4A', borderRadius: '16px', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#8C1A4A', color: 'white', fontWeight: 700, fontSize: '0.72rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>
+            For future pediatricians
           </div>
-
-          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-            {[
-              'Full database access for 1 year',
-              'Browse all salary submissions',
-              'Filter by specialty, state, career stage',
-              'Access expires after 12 months',
-            ].map(item => (
-              <li key={item} style={{ display: 'flex', gap: '0.625rem', fontSize: '0.9rem', color: '#374151' }}>
+          <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.25rem' }}>
+              <span style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a2332', lineHeight: 1 }}>$100</span>
+              <span style={{ color: '#5a6a7a', fontSize: '0.875rem', marginBottom: '0.2rem' }}>one-time</span>
+            </div>
+            <p style={{ color: '#5a6a7a', fontSize: '0.875rem', marginTop: '0.4rem' }}>12 months access, then expires</p>
+          </div>
+          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.625rem', marginBottom: '2rem', flexGrow: 1 }}>
+            {['Full database access for 1 year', 'Browse all salary submissions', 'Filter by specialty, state, career stage', 'Access expires after 12 months'].map(item => (
+              <li key={item} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.875rem', color: '#374151' }}>
                 <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
               </li>
             ))}
           </ul>
-
           {hasAccess && user?.tier === 'paid' ? (
-            <div style={{ textAlign: 'center', color: '#1e5f8e', fontWeight: 700, fontSize: '0.9rem' }}>✓ You have Paid access</div>
+            <div style={{ textAlign: 'center', color: '#8C1A4A', fontWeight: 700, fontSize: '0.9rem' }}>✓ You have Paid access</div>
           ) : hasAccess ? (
             <div style={{ textAlign: 'center', color: '#9aa5b0', fontSize: '0.875rem' }}>You already have access</div>
           ) : showEmailInput ? (
             <form onSubmit={handleGuestSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                value={guestEmail}
-                onChange={e => setGuestEmail(e.target.value)}
-                required
-                autoFocus
-                style={{
-                  width: '100%', padding: '0.75rem 1rem', fontSize: '0.95rem',
-                  border: '1.5px solid #d0dde8', borderRadius: '6px',
-                  outline: 'none', boxSizing: 'border-box',
-                }}
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="btn btn-primary"
-                style={{ width: '100%', opacity: loading ? 0.7 : 1 }}
-              >
+              <input type="email" placeholder="your@email.com" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} required autoFocus style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.95rem', border: '1.5px solid #d0dde8', borderRadius: '6px', outline: 'none', boxSizing: 'border-box' }} />
+              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', opacity: loading ? 0.7 : 1 }}>
                 {loading ? 'Redirecting to checkout…' : 'Continue to Payment →'}
               </button>
-              <button
-                type="button"
-                onClick={() => { setShowEmailInput(false); setError('') }}
-                style={{ background: 'none', border: 'none', color: '#9aa5b0', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}
-              >
-                Cancel
-              </button>
+              <button type="button" onClick={() => { setShowEmailInput(false); setError('') }} style={{ background: 'none', border: 'none', color: '#9aa5b0', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}>Cancel</button>
               {error && <p style={{ color: '#dc2626', fontSize: '0.82rem', textAlign: 'center' }}>{error}</p>}
             </form>
           ) : (
             <>
-              <button
-                onClick={handleBuy}
-                disabled={loading || !userLoaded}
-                className="btn btn-primary"
-                style={{ width: '100%', opacity: (loading || !userLoaded) ? 0.7 : 1 }}
-              >
+              <button onClick={handleBuy} disabled={loading || !userLoaded} className="btn btn-primary" style={{ width: '100%', opacity: (loading || !userLoaded) ? 0.7 : 1 }}>
                 {loading ? 'Redirecting to checkout…' : 'Buy Access — $100'}
               </button>
               {error && <p style={{ color: '#dc2626', fontSize: '0.82rem', marginTop: '0.5rem', textAlign: 'center' }}>{error}</p>}
-              <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.75rem' }}>
-                No account required. Pay and get instant access.
-              </p>
+              <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.75rem' }}>No account required. Pay and get instant access.</p>
             </>
           )}
         </div>
