@@ -146,6 +146,37 @@ const INITIAL: FormData = {
   website: '',
 }
 
+// ── MoneyInput ────────────────────────────────────────────────────────────────
+
+function MoneyInput({ value, onChange, className, hasError }: {
+  value: string
+  onChange: (v: string) => void
+  className?: string
+  hasError?: boolean
+}) {
+  const display = value ? Number(value).toLocaleString() : ''
+  return (
+    <div style={{ position: 'relative' }}>
+      <span style={{
+        position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)',
+        color: '#5a6a7a', fontWeight: 600, fontSize: '1rem', pointerEvents: 'none', zIndex: 1,
+      }}>$</span>
+      <input
+        type="text"
+        inputMode="numeric"
+        className={`form-input${hasError ? ' error' : ''}${className ? ' ' + className : ''}`}
+        placeholder="0"
+        value={display}
+        style={{ paddingLeft: '2rem' }}
+        onChange={e => {
+          const raw = e.target.value.replace(/[^0-9]/g, '')
+          onChange(raw)
+        }}
+      />
+    </div>
+  )
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function SubmitPage() {
@@ -460,12 +491,10 @@ function Step3({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="Annual Base Salary/Stipend" required error={errors.annualBaseSalary}>
-        <input
-          type="text"
-          className={`form-input${errors.annualBaseSalary ? ' error' : ''}`}
-          placeholder="Your answer"
+        <MoneyInput
           value={form.annualBaseSalary}
-          onChange={e => set('annualBaseSalary', e.target.value)}
+          onChange={v => set('annualBaseSalary', v)}
+          hasError={!!errors.annualBaseSalary}
         />
       </FormField>
 
@@ -487,12 +516,9 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="If Yes: How much?">
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Your answer"
+        <MoneyInput
           value={form.signOnBonusAmount}
-          onChange={e => set('signOnBonusAmount', e.target.value)}
+          onChange={v => set('signOnBonusAmount', v)}
         />
       </FormField>
 
@@ -531,12 +557,9 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="If Yes: Approximate annual moonlighting income?">
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Your answer"
+        <MoneyInput
           value={form.moonlightingIncome}
-          onChange={e => set('moonlightingIncome', e.target.value)}
+          onChange={v => set('moonlightingIncome', v)}
         />
       </FormField>
     </>
@@ -565,19 +588,22 @@ function Step4({ form, errors, set }: StepProps) {
 
       <FormField label="Average Clinical Hours Per Week">
         <input
-          type="text"
+          type="number"
+          inputMode="numeric"
+          min="1"
+          max="120"
           className="form-input"
-          placeholder="Your answer"
+          placeholder="e.g. 40"
           value={form.avgClinicalHoursPerWeek}
-          onChange={e => set('avgClinicalHoursPerWeek', e.target.value)}
+          onChange={e => set('avgClinicalHoursPerWeek', e.target.value.replace(/[^0-9]/g, ''))}
         />
       </FormField>
 
-      <FormField label="Call Frequency">
+      <FormField label="Call Frequency" hint="e.g. 1 in 4 weekends, every 3rd night, no call">
         <input
           type="text"
           className="form-input"
-          placeholder="Your answer"
+          placeholder="e.g. 1 in 4 weekends"
           value={form.callFrequency}
           onChange={e => set('callFrequency', e.target.value)}
         />

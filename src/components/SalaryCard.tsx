@@ -115,13 +115,13 @@ export function SalaryCard({ s }: Props) {
 
           <DetailRow label="Sign-on / Relocation Bonus" value={String(s.receivedSignOnBonus)} />
           {s.receivedSignOnBonus === 'Yes' && s.signOnBonusAmount
-            ? <DetailRow label="Sign-on Bonus Amount" value={`$${String(s.signOnBonusAmount)}`} />
+            ? <DetailRow label="Sign-on Bonus Amount" value={`$${Number(s.signOnBonusAmount).toLocaleString()}`} />
             : null
           }
           <DetailRow label="Productivity / Incentive Bonus" value={String(s.productivityBonus)} />
           <DetailRow label="Moonlighting Available" value={String(s.hasMoonlighting)} />
           {s.hasMoonlighting === 'Yes' && s.moonlightingIncome
-            ? <DetailRow label="Est. Moonlighting Income" value={`$${String(s.moonlightingIncome)}`} />
+            ? <DetailRow label="Est. Moonlighting Income" value={`$${Number(s.moonlightingIncome).toLocaleString()}`} />
             : null
           }
           <DetailRow label="Avg Clinical Hours / Week" value={s.avgClinicalHoursPerWeek ? String(s.avgClinicalHoursPerWeek) : ''} />
