@@ -295,6 +295,11 @@ export default function SubmitPage() {
       if (!form.practiceSetting) e.practiceSetting = 'Required'
     }
 
+    if (step === 5) {
+      if (!form.submitterEmail.trim()) e.submitterEmail = 'Email is required to receive access to the salary database.'
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.submitterEmail)) e.submitterEmail = 'Please enter a valid email address.'
+    }
+
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -696,22 +701,24 @@ function Step6({ form, errors: _errors, set }: StepProps) {
         backgroundColor: '#f0f5fa',
         borderRadius: '10px',
         padding: '1.25rem',
-        border: '1px solid #d0dde8',
+        border: `1px solid ${_errors.submitterEmail ? '#fca5a5' : '#d0dde8'}`,
       }}>
         <FormField
           label="Your Email Address"
-          hint="Required to access the salary database. Never shared or made public."
+          required
+          error={_errors.submitterEmail}
+          hint="Your email is required to receive access to the full salary database once your submission is approved. It is never shared or made public."
         >
           <input
             type="email"
-            className="form-input"
+            className={`form-input${_errors.submitterEmail ? ' error' : ''}`}
             placeholder="your@email.com"
             value={form.submitterEmail}
             onChange={e => set('submitterEmail', e.target.value)}
           />
         </FormField>
-        <p style={{ fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.5rem' }}>
-          By submitting your email you&apos;ll get instant access to all salary data — no separate sign-up needed.
+        <p style={{ fontSize: '0.8rem', color: '#5a6a7a', marginTop: '0.75rem' }}>
+          Once approved, you&apos;ll receive an email with a link to set up your free account and browse the full salary database — no separate sign-up needed.
         </p>
       </div>
     </>
