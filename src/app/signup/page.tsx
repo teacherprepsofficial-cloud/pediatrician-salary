@@ -157,16 +157,15 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: '#5a6a7a' }}>
-          Not a member yet?{' '}
-          <Link href="/submit" style={{ color: '#16a34a', fontWeight: 600, textDecoration: 'none' }}>
+        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: '#5a6a7a', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span>Not a member yet?</span>
+          <Link href="/submit" style={{ color: '#8C1A4A', fontWeight: 700, textDecoration: 'none' }}>
             Submit your salary
           </Link>
-          {' '}or{' '}
-          <Link href="/pricing" style={{ color: '#8C1A4A', fontWeight: 600, textDecoration: 'none' }}>
-            get full access
+          <Link href="/pricing" style={{ color: '#B8860B', fontWeight: 700, textDecoration: 'none' }}>
+            Get full access
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   )
