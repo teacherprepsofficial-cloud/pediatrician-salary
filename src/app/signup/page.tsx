@@ -158,9 +158,13 @@ export default function SignupPage() {
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: '#5a6a7a' }}>
-          Already have an account?{' '}
-          <Link href="/login" style={{ color: '#1e5f8e', fontWeight: 600, textDecoration: 'none' }}>
-            Sign in
+          Not a member yet?{' '}
+          <Link href="/submit" style={{ color: '#16a34a', fontWeight: 600, textDecoration: 'none' }}>
+            Submit your salary
+          </Link>
+          {' '}or{' '}
+          <Link href="/pricing" style={{ color: '#8C1A4A', fontWeight: 600, textDecoration: 'none' }}>
+            get full access
           </Link>
         </p>
       </div>
