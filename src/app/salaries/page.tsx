@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { SalaryCard } from '@/components/SalaryCard'
 
@@ -13,6 +13,13 @@ export default function SalariesPage() {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  // ── Filters ────────────────────────────────────────────────────────────────
+  const [search, setSearch] = useState('')
+  const [filterState, setFilterState] = useState('')
+  const [filterSpecialty, setFilterSpecialty] = useState('')
+  const [filterStage, setFilterStage] = useState('')
+  const [filterSetting, setFilterSetting] = useState('')
 
   // Check if already unlocked
   useEffect(() => {
@@ -60,6 +67,45 @@ export default function SalariesPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  // ── Derived filter options (from real data) ───────────────────────────────
+  const stateOptions = useMemo(() =>
+    [...new Set(salaries.map(s => String(s.state)).filter(Boolean))].sort()
+  , [salaries])
+
+  const specialtyOptions = useMemo(() =>
+    [...new Set(salaries.map(s => String(s.specialty)).filter(Boolean))].sort()
+  , [salaries])
+
+  const settingOptions = useMemo(() =>
+    [...new Set(salaries.map(s => String(s.practiceSetting)).filter(Boolean))].sort()
+  , [salaries])
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    return salaries.filter(s => {
+      if (q) {
+        const haystack = [s.specialty, s.hospitalName, s.city, s.state, s.careerStage, s.practiceSetting]
+          .map(v => String(v ?? '').toLowerCase()).join(' ')
+        if (!haystack.includes(q)) return false
+      }
+      if (filterState && s.state !== filterState) return false
+      if (filterSpecialty && s.specialty !== filterSpecialty) return false
+      if (filterStage && s.careerStage !== filterStage) return false
+      if (filterSetting && s.practiceSetting !== filterSetting) return false
+      return true
+    })
+  }, [salaries, search, filterState, filterSpecialty, filterStage, filterSetting])
+
+  const hasFilters = search || filterState || filterSpecialty || filterStage || filterSetting
+
+  function clearFilters() {
+    setSearch('')
+    setFilterState('')
+    setFilterSpecialty('')
+    setFilterStage('')
+    setFilterSetting('')
   }
 
   // ── Email gate ────────────────────────────────────────────────────────────
@@ -173,14 +219,177 @@ export default function SalariesPage() {
   // ── Salary list ───────────────────────────────────────────────────────────
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2.5rem 1.25rem 4rem' }}>
-      <div style={{ marginBottom: '2rem' }}>
+
+      {/* Header */}
+      <div style={{ marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 800, color: '#1a2332', letterSpacing: '-0.01em', marginBottom: '0.5rem' }}>
           Pediatrician Salaries
         </h1>
         <p style={{ color: '#5a6a7a', fontSize: '1rem' }}>
-          {loading ? 'Loading…' : `${salaries.length} ${salaries.length === 1 ? 'submission' : 'submissions'} from pediatricians across the US`}
+          {loading ? 'Loading…' : `${filtered.length} of ${salaries.length} ${salaries.length === 1 ? 'submission' : 'submissions'} from pediatricians across the US`}
         </p>
       </div>
+
+      {/* Search + Filters */}
+      {!loading && salaries.length > 0 && (
+        <div style={{
+          backgroundColor: 'white',
+          border: '1px solid #d0dde8',
+          borderRadius: '12px',
+          padding: '1.25rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}>
+          {/* Search bar */}
+          <div style={{ position: 'relative' }}>
+            <span style={{
+              position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)',
+              color: '#9aa5b0', pointerEvents: 'none', fontSize: '1rem',
+            }}>🔍</span>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Search by specialty, hospital, city, or state…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              style={{ paddingLeft: '2.5rem' }}
+            />
+          </div>
+
+          {/* Filter row */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+            {/* Career Stage pills */}
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
+              {['Resident', 'Fellow', 'Attending'].map(stage => (
+                <button
+                  key={stage}
+                  type="button"
+                  onClick={() => setFilterStage(filterStage === stage ? '' : stage)}
+                  style={{
+                    padding: '0.3rem 0.8rem',
+                    borderRadius: '9999px',
+                    border: `2px solid ${filterStage === stage ? '#1e5f8e' : '#d0dde8'}`,
+                    backgroundColor: filterStage === stage ? '#1e5f8e' : 'white',
+                    color: filterStage === stage ? 'white' : '#5a6a7a',
+                    fontWeight: 600,
+                    fontSize: '0.82rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.12s ease',
+                  }}
+                >
+                  {stage}
+                </button>
+              ))}
+            </div>
+
+            {/* State select */}
+            {stateOptions.length > 1 && (
+              <select
+                value={filterState}
+                onChange={e => setFilterState(e.target.value)}
+                style={{
+                  border: `2px solid ${filterState ? '#1e5f8e' : '#d0dde8'}`,
+                  borderRadius: '9999px',
+                  padding: '0.3rem 2rem 0.3rem 0.875rem',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: filterState ? '#1e5f8e' : '#5a6a7a',
+                  backgroundColor: filterState ? '#e8f1f8' : 'white',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%235a6a7a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.1em',
+                  outline: 'none',
+                }}
+              >
+                <option value="">All States</option>
+                {stateOptions.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            )}
+
+            {/* Specialty select */}
+            {specialtyOptions.length > 1 && (
+              <select
+                value={filterSpecialty}
+                onChange={e => setFilterSpecialty(e.target.value)}
+                style={{
+                  border: `2px solid ${filterSpecialty ? '#1e5f8e' : '#d0dde8'}`,
+                  borderRadius: '9999px',
+                  padding: '0.3rem 2rem 0.3rem 0.875rem',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: filterSpecialty ? '#1e5f8e' : '#5a6a7a',
+                  backgroundColor: filterSpecialty ? '#e8f1f8' : 'white',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%235a6a7a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.1em',
+                  outline: 'none',
+                  maxWidth: '220px',
+                }}
+              >
+                <option value="">All Specialties</option>
+                {specialtyOptions.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            )}
+
+            {/* Practice Setting select */}
+            {settingOptions.length > 1 && (
+              <select
+                value={filterSetting}
+                onChange={e => setFilterSetting(e.target.value)}
+                style={{
+                  border: `2px solid ${filterSetting ? '#1e5f8e' : '#d0dde8'}`,
+                  borderRadius: '9999px',
+                  padding: '0.3rem 2rem 0.3rem 0.875rem',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: filterSetting ? '#1e5f8e' : '#5a6a7a',
+                  backgroundColor: filterSetting ? '#e8f1f8' : 'white',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2020/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%235a6a7a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.1em',
+                  outline: 'none',
+                  maxWidth: '220px',
+                }}
+              >
+                <option value="">All Settings</option>
+                {settingOptions.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            )}
+
+            {/* Clear filters */}
+            {hasFilters && (
+              <button
+                onClick={clearFilters}
+                style={{
+                  marginLeft: 'auto',
+                  background: 'none',
+                  border: 'none',
+                  color: '#8C1A4A',
+                  fontWeight: 600,
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  padding: '0.3rem 0',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '2px',
+                }}
+              >
+                × Clear filters
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {loading && (
         <div style={{ textAlign: 'center', padding: '4rem', color: '#5a6a7a' }}>Loading salaries…</div>
@@ -188,9 +397,18 @@ export default function SalariesPage() {
 
       {!loading && salaries.length === 0 && <EmptyState />}
 
-      {!loading && salaries.length > 0 && (
+      {!loading && salaries.length > 0 && filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '4rem', color: '#5a6a7a', backgroundColor: 'white', borderRadius: '12px', border: '1px solid #d0dde8' }}>
+          <p style={{ fontWeight: 600, marginBottom: '0.5rem' }}>No results match your filters.</p>
+          <button onClick={clearFilters} style={{ background: 'none', border: 'none', color: '#1e5f8e', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
+            Clear all filters
+          </button>
+        </div>
+      )}
+
+      {!loading && filtered.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {salaries.map(s => (
+          {filtered.map(s => (
             <SalaryCard key={String(s._id)} s={s} />
           ))}
         </div>
