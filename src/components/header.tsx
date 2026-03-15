@@ -56,15 +56,15 @@ export function Header() {
           <NavLink href="/salaries">Browse Salaries</NavLink>
           <NavLink href="/about">About</NavLink>
           <Link href="/submit" style={{
-            backgroundColor: '#e8a020',
-            color: '#1a2332',
+            backgroundColor: '#8C1A4A',
+            color: 'white',
             fontWeight: 700,
             padding: '0.5rem 1.25rem',
             borderRadius: '6px',
             textDecoration: 'none',
             fontSize: '0.9rem',
             marginLeft: '0.5rem',
-            border: '2px solid #e8a020',
+            border: '2px solid #8C1A4A',
             transition: 'background-color 0.15s, border-color 0.15s',
           }}>
             Submit Your Salary
@@ -116,8 +116,8 @@ export function Header() {
           <Link href="/submit" style={{
             display: 'block',
             marginTop: '0.75rem',
-            backgroundColor: '#e8a020',
-            color: '#1a2332',
+            backgroundColor: '#8C1A4A',
+            color: 'white',
             fontWeight: 700,
             padding: '0.875rem 1.25rem',
             borderRadius: '6px',

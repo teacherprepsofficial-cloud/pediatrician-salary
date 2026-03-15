@@ -174,8 +174,8 @@ export default function AdminPage() {
             {t === 'pending' && pendingCount !== null && pendingCount > 0 && (
               <span style={{
                 marginLeft: '0.5rem',
-                backgroundColor: '#e8a020',
-                color: '#1a2332',
+                backgroundColor: '#8C1A4A',
+                color: 'white',
                 borderRadius: '9999px',
                 padding: '0.1rem 0.5rem',
                 fontSize: '0.75rem',

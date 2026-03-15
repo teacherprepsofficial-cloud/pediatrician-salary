@@ -5,9 +5,9 @@
   --color-primary:       #1e5f8e;
   --color-primary-dark:  #164a6e;
   --color-primary-light: #e8f1f8;
-  --color-accent:        #e8a020;
-  --color-accent-dark:   #c8880a;
-  --color-accent-light:  #fef3dc;
+  --color-accent:        #8C1A4A;
+  --color-accent-dark:   #701538;
+  --color-accent-light:  #fdf0f5;
   --color-bg:            #f0f5fa;
   --color-card-bg:       #ffffff;
   --color-card-border:   #d0dde8;
@@ -67,7 +67,7 @@ input, select, textarea {
 
 .btn-primary {
   background-color: var(--color-accent);
-  color: #1a2332;
+  color: white;
   border: 2px solid var(--color-accent);
 }
 .btn-primary:hover {

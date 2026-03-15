@@ -12,7 +12,7 @@ function formatSalary(n: number) {
 
 function ratingColor(r: number) {
   if (r >= 8) return '#16a34a'
-  if (r >= 5) return '#e8a020'
+  if (r >= 5) return '#8C1A4A'
   return '#dc2626'
 }
 

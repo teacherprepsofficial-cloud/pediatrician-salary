@@ -57,13 +57,13 @@ export default async function HomePage() {
             <div style={{
               display: 'inline-block',
               alignSelf: 'flex-start',
-              backgroundColor: 'rgba(232, 160, 32, 0.2)',
-              border: '1px solid rgba(232, 160, 32, 0.4)',
+              backgroundColor: 'rgba(140, 26, 74, 0.2)',
+              border: '1px solid rgba(140, 26, 74, 0.4)',
               borderRadius: '9999px',
               padding: '0.375rem 1rem',
               fontSize: '0.82rem',
               fontWeight: 600,
-              color: '#e8c060',
+              color: '#e8a0bf',
               marginBottom: '1.5rem',
               letterSpacing: '0.03em',
             }}>
@@ -79,7 +79,7 @@ export default async function HomePage() {
               textAlign: 'left',
             }}>
               Know Your Worth.<br />
-              <span style={{ color: '#e8a020' }}>Share Your Salary.</span>
+              <span style={{ color: '#e8a0bf' }}>Share Your Salary.</span>
             </h1>
 
             <p style={{
@@ -277,7 +277,7 @@ export default async function HomePage() {
         />
         <div style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, #e8a020 0%, #c8880a 100%)',
+          background: 'linear-gradient(135deg, #8C1A4A 0%, #701538 100%)',
           padding: '3.5rem 1.25rem',
           textAlign: 'center',
         }}>
@@ -291,7 +291,7 @@ export default async function HomePage() {
             }}>
               Your Salary Helps the Whole Community
             </h2>
-            <p style={{ color: '#3a2a00', fontSize: '1.05rem', marginBottom: '2rem', lineHeight: 1.6 }}>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1.05rem', marginBottom: '2rem', lineHeight: 1.6 }}>
               Once you submit, your data is reviewed and added to the database — where other
               pediatricians can see what fair compensation actually looks like in their specialty and state.
             </p>
