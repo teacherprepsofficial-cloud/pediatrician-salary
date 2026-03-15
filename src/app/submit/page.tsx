@@ -768,14 +768,27 @@ function SuccessScreen() {
       <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.75rem' }}>
         Thank you for submitting!
       </h1>
-      <p style={{ color: '#5a6a7a', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '2rem' }}>
-        Your salary data has been received and will be reviewed before being added to the database.
-        Every submission helps pediatricians across the country negotiate better compensation.
-      </p>
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <a href="/salaries" className="btn btn-secondary">Browse Salaries</a>
-        <a href="/" className="btn btn-ghost">Back to Home</a>
+      <div style={{
+        backgroundColor: '#f0f5fa',
+        border: '1px solid #d0dde8',
+        borderRadius: '12px',
+        padding: '1.25rem 1.5rem',
+        marginBottom: '1.5rem',
+        textAlign: 'left',
+      }}>
+        <p style={{ fontWeight: 700, color: '#1a2332', fontSize: '0.95rem', marginBottom: '0.4rem' }}>
+          Your submission is pending approval.
+        </p>
+        <p style={{ color: '#5a6a7a', fontSize: '0.9rem', lineHeight: 1.7, margin: 0 }}>
+          Our team reviews every submission to ensure data quality. Once your salary data is approved,
+          you will receive an email with full access to the Pediatrician Salary Database — completely free.
+        </p>
       </div>
+      <p style={{ color: '#5a6a7a', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '2rem' }}>
+        Thank you for helping make compensation transparent for pediatricians across the country.
+        We appreciate you taking the time — hang tight!
+      </p>
+      <a href="/" className="btn btn-ghost">Back to Home</a>
     </div>
   )
 }
