@@ -26,9 +26,9 @@ export function Header() {
       position: 'sticky',
       top: 0,
       zIndex: 50,
-      backgroundColor: 'rgba(30, 95, 142, 0.97)',
-      backdropFilter: 'blur(8px)',
-      borderBottom: '1px solid rgba(255,255,255,0.12)',
+      backgroundColor: 'white',
+      borderBottom: '1px solid #d0dde8',
+      boxShadow: '0 1px 4px rgba(30, 95, 142, 0.06)',
     }}>
       <div style={{
         maxWidth: '1200px',
@@ -44,7 +44,7 @@ export function Header() {
           <div style={{
             width: '36px',
             height: '36px',
-            backgroundColor: '#e8a020',
+            backgroundColor: '#1e5f8e',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
@@ -54,12 +54,12 @@ export function Header() {
             🩺
           </div>
           <span style={{
-            color: 'white',
+            color: '#1a2332',
             fontWeight: 700,
             fontSize: '1.05rem',
             letterSpacing: '-0.01em',
           }}>
-            PediatricianSalary<span style={{ color: '#e8a020' }}>.com</span>
+            PediatricianSalary<span style={{ color: '#1e5f8e' }}>.com</span>
           </span>
         </Link>
 
@@ -76,7 +76,8 @@ export function Header() {
             textDecoration: 'none',
             fontSize: '0.9rem',
             marginLeft: '0.5rem',
-            transition: 'background-color 0.15s',
+            border: '2px solid #e8a020',
+            transition: 'background-color 0.15s, border-color 0.15s',
           }}>
             Submit Your Salary
           </Link>
@@ -92,7 +93,7 @@ export function Header() {
             border: 'none',
             cursor: 'pointer',
             padding: '0.5rem',
-            color: 'white',
+            color: '#1a2332',
           }}
           className="show-mobile"
         >
@@ -114,12 +115,13 @@ export function Header() {
       {/* Mobile menu */}
       {menuOpen && (
         <div style={{
-          backgroundColor: '#164a6e',
-          borderTop: '1px solid rgba(255,255,255,0.1)',
+          backgroundColor: 'white',
+          borderTop: '1px solid #d0dde8',
           padding: '1rem 1.25rem 1.5rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '0.25rem',
+          boxShadow: '0 8px 24px rgba(30, 95, 142, 0.1)',
         }}>
           <MobileNavLink href="/salaries">Browse Salaries</MobileNavLink>
           <MobileNavLink href="/about">About</MobileNavLink>
@@ -157,7 +159,7 @@ export function Header() {
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link href={href} style={{
-      color: 'rgba(255,255,255,0.85)',
+      color: '#5a6a7a',
       textDecoration: 'none',
       fontWeight: 500,
       fontSize: '0.9rem',
@@ -166,12 +168,12 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
       transition: 'background-color 0.15s, color 0.15s',
     }}
     onMouseEnter={e => {
-      (e.target as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.12)'
-      ;(e.target as HTMLElement).style.color = 'white'
+      (e.target as HTMLElement).style.backgroundColor = '#f0f5fa'
+      ;(e.target as HTMLElement).style.color = '#1a2332'
     }}
     onMouseLeave={e => {
       (e.target as HTMLElement).style.backgroundColor = ''
-      ;(e.target as HTMLElement).style.color = 'rgba(255,255,255,0.85)'
+      ;(e.target as HTMLElement).style.color = '#5a6a7a'
     }}
     >
       {children}
@@ -182,12 +184,12 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 function MobileNavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link href={href} style={{
-      color: 'rgba(255,255,255,0.9)',
+      color: '#1a2332',
       textDecoration: 'none',
       fontWeight: 500,
       fontSize: '1rem',
       padding: '0.75rem 0.5rem',
-      borderBottom: '1px solid rgba(255,255,255,0.08)',
+      borderBottom: '1px solid #e8eff6',
       display: 'block',
     }}>
       {children}

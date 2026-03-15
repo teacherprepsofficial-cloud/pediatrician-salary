@@ -297,3 +297,62 @@ input, select, textarea {
 @supports (padding: env(safe-area-inset-bottom)) {
   footer { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
 }
+
+/* ── Hero split grid ─────────────────────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 540px;
+}
+
+.hero-image-panel {
+  overflow: hidden;
+  min-height: 320px;
+}
+
+.hero-image-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-image-panel {
+    min-height: 260px;
+    max-height: 320px;
+  }
+}
+
+/* ── Photo showcase grid ─────────────────────────── */
+.photo-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .photo-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Why it matters split ────────────────────────── */
+.why-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .why-split {
+    grid-template-columns: 1fr;
+  }
+  .why-split-image {
+    display: none;
+  }
+}
