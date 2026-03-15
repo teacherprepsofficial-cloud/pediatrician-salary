@@ -146,72 +146,34 @@ const INITIAL: FormData = {
   website: '',
 }
 
-// ── PillSelect ────────────────────────────────────────────────────────────────
+// ── SelectInput ───────────────────────────────────────────────────────────────
 
-function PillSelect({
+function SelectInput({
   options,
   value,
   onChange,
-  searchable,
+  placeholder = 'Select…',
   hasError,
 }: {
   options: string[]
   value: string
   onChange: (v: string) => void
-  searchable?: boolean
+  placeholder?: string
   hasError?: boolean
+  searchable?: boolean
 }) {
-  const [query, setQuery] = useState('')
-  const filtered = searchable && query.trim()
-    ? options.filter(o => o.toLowerCase().includes(query.toLowerCase()))
-    : options
-
   return (
-    <div>
-      {searchable && (
-        <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
-          <span style={{
-            position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)',
-            color: '#9aa5b0', pointerEvents: 'none', fontSize: '0.95rem',
-          }}>⌕</span>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Search…"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            style={{ paddingLeft: '2.25rem', fontSize: '0.9rem' }}
-          />
-        </div>
-      )}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-        {filtered.map(opt => (
-          <button
-            key={opt}
-            type="button"
-            onClick={() => onChange(opt)}
-            style={{
-              padding: '0.375rem 0.875rem',
-              borderRadius: '9999px',
-              border: `2px solid ${value === opt ? '#1e5f8e' : hasError ? '#fca5a5' : '#d0dde8'}`,
-              backgroundColor: value === opt ? '#1e5f8e' : 'white',
-              color: value === opt ? 'white' : '#1a2332',
-              fontWeight: value === opt ? 700 : 500,
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              transition: 'all 0.12s ease',
-            }}
-          >
-            {opt}
-          </button>
-        ))}
-        {filtered.length === 0 && (
-          <p style={{ color: '#9aa5b0', fontSize: '0.875rem', padding: '0.25rem 0' }}>
-            No results for &quot;{query}&quot;
-          </p>
-        )}
-      </div>
-    </div>
+    <select
+      className={`form-input${hasError ? ' error' : ''}`}
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      style={{ cursor: 'pointer' }}
+    >
+      <option value="">{placeholder}</option>
+      {options.map(opt => (
+        <option key={opt} value={opt}>{opt}</option>
+      ))}
+    </select>
   )
 }
 
@@ -494,7 +456,7 @@ function Step1({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="State" required error={errors.state}>
-        <PillSelect
+        <SelectInput
           options={US_STATES}
           value={form.state}
           onChange={v => set('state', v)}
@@ -504,7 +466,7 @@ function Step1({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Rating of working at this hospital" required error={errors.rating}>
-        <PillSelect
+        <SelectInput
           options={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
           value={form.rating}
           onChange={v => set('rating', v)}
@@ -522,7 +484,7 @@ function Step2({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="Pediatrician Position / Specialty" required error={errors.specialty}>
-        <PillSelect
+        <SelectInput
           options={SPECIALTIES}
           value={form.specialty}
           onChange={v => set('specialty', v)}
@@ -532,7 +494,7 @@ function Step2({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Current Career Stage" required error={errors.careerStage}>
-        <PillSelect
+        <SelectInput
           options={['Resident', 'Fellow', 'Attending']}
           value={form.careerStage}
           onChange={v => set('careerStage', v)}
@@ -555,7 +517,7 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Did you receive a Sign-on or Relocation Bonus?" required error={errors.receivedSignOnBonus}>
-        <PillSelect
+        <SelectInput
           options={['Yes', 'No']}
           value={form.receivedSignOnBonus}
           onChange={v => set('receivedSignOnBonus', v)}
@@ -571,7 +533,7 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Are you eligible for Productivity or Incentive Bonuses?" required error={errors.productivityBonus}>
-        <PillSelect
+        <SelectInput
           options={['Yes - RVU based', 'Yes - Quality based', 'No']}
           value={form.productivityBonus}
           onChange={v => set('productivityBonus', v)}
@@ -580,7 +542,7 @@ function Step3({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Do you have Moonlighting or Side-gig income options?" required error={errors.hasMoonlighting}>
-        <PillSelect
+        <SelectInput
           options={['Yes', 'No']}
           value={form.hasMoonlighting}
           onChange={v => set('hasMoonlighting', v)}
@@ -602,7 +564,7 @@ function Step4({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="FTE Status" required error={errors.fteStatus}>
-        <PillSelect
+        <SelectInput
           options={['1.0 Full Time', '<1.0 Part Time']}
           value={form.fteStatus}
           onChange={v => set('fteStatus', v)}
@@ -634,7 +596,7 @@ function Step4({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Total Years Working in this Role" required error={errors.yearsInRole}>
-        <PillSelect
+        <SelectInput
           options={YEARS_IN_ROLE}
           value={form.yearsInRole}
           onChange={v => set('yearsInRole', v)}
@@ -649,7 +611,7 @@ function Step5({ form, errors, set }: StepProps) {
   return (
     <>
       <FormField label="Is this position PSLF Eligible?">
-        <PillSelect
+        <SelectInput
           options={['Yes', 'No', 'Unsure']}
           value={form.pslfEligible}
           onChange={v => set('pslfEligible', v)}
@@ -657,7 +619,7 @@ function Step5({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="Practice Setting" required error={errors.practiceSetting}>
-        <PillSelect
+        <SelectInput
           options={PRACTICE_SETTINGS}
           value={form.practiceSetting}
           onChange={v => set('practiceSetting', v)}
@@ -666,7 +628,7 @@ function Step5({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="(For Residents/Fellows Only) Do you receive a Housing Stipend?">
-        <PillSelect
+        <SelectInput
           options={['Yes', 'No']}
           value={form.housingStipend}
           onChange={v => set('housingStipend', v)}
@@ -674,7 +636,7 @@ function Step5({ form, errors, set }: StepProps) {
       </FormField>
 
       <FormField label="(For Residents/Fellows Only) Is your program Unionized?">
-        <PillSelect
+        <SelectInput
           options={['Yes', 'No']}
           value={form.programUnionized}
           onChange={v => set('programUnionized', v)}
