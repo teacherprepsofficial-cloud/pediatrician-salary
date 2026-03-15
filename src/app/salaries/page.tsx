@@ -154,7 +154,7 @@ export default function SalariesPage() {
             display: 'flex', flexDirection: 'column',
           }}>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              Have an account
+              Welcome back!
             </p>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
               Log in
@@ -180,7 +180,7 @@ export default function SalariesPage() {
               letterSpacing: '0.05em', whiteSpace: 'nowrap',
             }}>RECOMMENDED</div>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e5f8e', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              Free
+              For existing pediatricians
             </p>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
               Submit your salary
@@ -200,7 +200,7 @@ export default function SalariesPage() {
             display: 'flex', flexDirection: 'column',
           }}>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8C1A4A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
-              $100 one-time
+              For future pediatricians
             </p>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.5rem' }}>
               Get full access
