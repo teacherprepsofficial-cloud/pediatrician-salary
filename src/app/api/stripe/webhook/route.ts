@@ -30,28 +30,37 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true })
     }
 
-    const userId = session.metadata?.userId
-    if (!userId) {
-      console.error('No userId in session metadata')
-      return NextResponse.json({ received: true })
-    }
-
     try {
       await connectDB()
       const paidUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year
+      const stripeCustomerId = session.customer as string
+      const stripePaymentId = session.payment_intent as string
 
-      const user = await User.findByIdAndUpdate(userId, {
-        tier: 'paid',
-        paidUntil,
-        stripeCustomerId: session.customer as string,
-        stripePaymentId: session.payment_intent as string,
-      }, { new: false })
+      let user
+      const userId = session.metadata?.userId
 
-      // Guest buyer (no password set) — send account setup email
+      if (userId) {
+        // Logged-in user — upgrade by ID
+        user = await User.findByIdAndUpdate(userId, { tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId }, { new: false })
+      } else {
+        // Guest buyer — find or create by email Stripe collected
+        const email = session.customer_details?.email?.toLowerCase().trim()
+        if (!email) {
+          console.error('No email from Stripe guest checkout')
+          return NextResponse.json({ received: true })
+        }
+        user = await User.findOneAndUpdate(
+          { email },
+          { tier: 'paid', paidUntil, stripeCustomerId, stripePaymentId },
+          { new: false, upsert: true }
+        )
+      }
+
+      // New guest account (no password) — send setup email
       if (user && !user.passwordHash) {
         const token = crypto.randomBytes(32).toString('hex')
         const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
-        await User.findByIdAndUpdate(userId, { resetToken: token, resetTokenExpiry: expiry })
+        await User.findByIdAndUpdate(user._id, { resetToken: token, resetTokenExpiry: expiry })
         await sendAccountSetupEmail(user.email, token).catch(e => console.error('Setup email failed:', e))
       }
     } catch (err) {

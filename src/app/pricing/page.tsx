@@ -12,8 +12,6 @@ export default function PricingPage() {
   const [userLoaded, setUserLoaded] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [guestEmail, setGuestEmail] = useState('')
-  const [showEmailInput, setShowEmailInput] = useState(false)
 
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.json()).then(d => {
@@ -22,38 +20,20 @@ export default function PricingPage() {
     })
   }, [])
 
-  async function startCheckout(emailOverride?: string) {
+  async function handleBuy() {
+    if (!userLoaded) return
     setLoading(true)
     setError('')
 
-    const body = emailOverride ? { email: emailOverride } : {}
     const res = await fetch('/api/stripe/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({}),
     })
     const data = await res.json()
 
     if (!res.ok) { setError(data.error || 'Something went wrong.'); setLoading(false); return }
     window.location.href = data.url
-  }
-
-  async function handleBuy() {
-    if (!userLoaded) return
-
-    if (user) {
-      // Logged-in user — go straight to checkout
-      await startCheckout()
-    } else {
-      // Guest — show email input inline
-      setShowEmailInput(true)
-    }
-  }
-
-  async function handleGuestSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!guestEmail.trim()) return
-    await startCheckout(guestEmail.trim())
   }
 
   const hasAccess = user && (user.tier === 'pro' || user.tier === 'paid')
@@ -148,15 +128,6 @@ export default function PricingPage() {
             <div style={{ textAlign: 'center', color: '#8C1A4A', fontWeight: 700, fontSize: '0.9rem' }}>✓ You have Paid access</div>
           ) : hasAccess ? (
             <div style={{ textAlign: 'center', color: '#9aa5b0', fontSize: '0.875rem' }}>You already have access</div>
-          ) : showEmailInput ? (
-            <form onSubmit={handleGuestSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              <input type="email" placeholder="your@email.com" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} required autoFocus style={{ width: '100%', padding: '0.75rem 1rem', fontSize: '0.95rem', border: '1.5px solid #d0dde8', borderRadius: '6px', outline: 'none', boxSizing: 'border-box' }} />
-              <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', opacity: loading ? 0.7 : 1 }}>
-                {loading ? 'Redirecting to checkout…' : 'Continue to Payment →'}
-              </button>
-              <button type="button" onClick={() => { setShowEmailInput(false); setError('') }} style={{ background: 'none', border: 'none', color: '#9aa5b0', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}>Cancel</button>
-              {error && <p style={{ color: '#dc2626', fontSize: '0.82rem', textAlign: 'center' }}>{error}</p>}
-            </form>
           ) : (
             <>
               <button onClick={handleBuy} disabled={loading || !userLoaded} className="btn btn-primary" style={{ width: '100%', opacity: (loading || !userLoaded) ? 0.7 : 1 }}>
