@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IUser extends Document {
   email: string
-  passwordHash: string
+  passwordHash: string | null
   tier: 'none' | 'pro' | 'paid'
   emailVerified: boolean
   emailVerifyToken: string | null
@@ -18,7 +18,7 @@ export interface IUser extends Document {
 
 const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  passwordHash: { type: String, required: true },
+  passwordHash: { type: String, default: null },
   tier: { type: String, enum: ['none', 'pro', 'paid'], default: 'none' },
   emailVerified: { type: Boolean, default: false },
   emailVerifyToken: { type: String, default: null },

@@ -20,6 +20,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
     }
 
+    if (!user.passwordHash) {
+      // Guest account (paid without signup) — must set password first
+      return NextResponse.json({ error: 'No password set. Check your email for a link to set up your account, or use Forgot Password.' }, { status: 401 })
+    }
+
     const valid = await bcrypt.compare(password, user.passwordHash)
     if (!valid) {
       return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })

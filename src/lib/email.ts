@@ -51,6 +51,30 @@ export async function sendPasswordResetEmail(email: string, token: string) {
   })
 }
 
+export async function sendAccountSetupEmail(email: string, token: string) {
+  const link = `${BASE_URL}/reset-password?token=${token}`
+  await getResend().emails.send({
+    from: FROM,
+    to: email,
+    subject: 'You\'re in! Set up your PediatricianSalary.com account',
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:2rem">
+        <h2 style="color:#1a2332;font-size:1.5rem;margin-bottom:0.75rem">Payment confirmed — set up your account</h2>
+        <p style="color:#5a6a7a;line-height:1.7;margin-bottom:1.5rem">
+          Your payment was successful and you now have 12 months of access to the PediatricianSalary.com database.
+          Click below to set a password and activate your account.
+        </p>
+        <a href="${link}" style="display:inline-block;background:#1e5f8e;color:white;padding:0.75rem 1.75rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:1rem">
+          Set Up My Account
+        </a>
+        <p style="color:#9aa5b0;font-size:0.8rem;margin-top:1.5rem">
+          This link expires in 24 hours. If you need a new one, use Forgot Password on the login page.
+        </p>
+      </div>
+    `,
+  })
+}
+
 export async function sendApprovalEmail(email: string) {
   await getResend().emails.send({
     from: FROM,

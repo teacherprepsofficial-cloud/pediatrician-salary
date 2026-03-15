@@ -9,24 +9,51 @@ type User = { email: string; tier: 'none' | 'pro' | 'paid'; paidUntil?: string }
 export default function PricingPage() {
   const router = useRouter()
   const [user, setUser] = useState<User>(null)
+  const [userLoaded, setUserLoaded] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [guestEmail, setGuestEmail] = useState('')
+  const [showEmailInput, setShowEmailInput] = useState(false)
 
   useEffect(() => {
-    fetch('/api/auth/me').then(r => r.json()).then(d => setUser(d.user || null))
+    fetch('/api/auth/me').then(r => r.json()).then(d => {
+      setUser(d.user || null)
+      setUserLoaded(true)
+    })
   }, [])
 
-  async function handleBuy() {
-    if (!user) { router.push('/signup?redirect=/pricing'); return }
-
+  async function startCheckout(emailOverride?: string) {
     setLoading(true)
     setError('')
 
-    const res = await fetch('/api/stripe/checkout', { method: 'POST' })
+    const body = emailOverride ? { email: emailOverride } : {}
+    const res = await fetch('/api/stripe/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
     const data = await res.json()
 
     if (!res.ok) { setError(data.error || 'Something went wrong.'); setLoading(false); return }
     window.location.href = data.url
+  }
+
+  async function handleBuy() {
+    if (!userLoaded) return
+
+    if (user) {
+      // Logged-in user — go straight to checkout
+      await startCheckout()
+    } else {
+      // Guest — show email input inline
+      setShowEmailInput(true)
+    }
+  }
+
+  async function handleGuestSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!guestEmail.trim()) return
+    await startCheckout(guestEmail.trim())
   }
 
   const hasAccess = user && (user.tier === 'pro' || user.tier === 'paid')
@@ -121,22 +148,52 @@ export default function PricingPage() {
             <div style={{ textAlign: 'center', color: '#1e5f8e', fontWeight: 700, fontSize: '0.9rem' }}>✓ You have Paid access</div>
           ) : hasAccess ? (
             <div style={{ textAlign: 'center', color: '#9aa5b0', fontSize: '0.875rem' }}>You already have access</div>
-          ) : (
-            <>
+          ) : showEmailInput ? (
+            <form onSubmit={handleGuestSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={guestEmail}
+                onChange={e => setGuestEmail(e.target.value)}
+                required
+                autoFocus
+                style={{
+                  width: '100%', padding: '0.75rem 1rem', fontSize: '0.95rem',
+                  border: '1.5px solid #d0dde8', borderRadius: '6px',
+                  outline: 'none', boxSizing: 'border-box',
+                }}
+              />
               <button
-                onClick={handleBuy}
+                type="submit"
                 disabled={loading}
                 className="btn btn-primary"
                 style={{ width: '100%', opacity: loading ? 0.7 : 1 }}
               >
+                {loading ? 'Redirecting to checkout…' : 'Continue to Payment →'}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setShowEmailInput(false); setError('') }}
+                style={{ background: 'none', border: 'none', color: '#9aa5b0', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}
+              >
+                Cancel
+              </button>
+              {error && <p style={{ color: '#dc2626', fontSize: '0.82rem', textAlign: 'center' }}>{error}</p>}
+            </form>
+          ) : (
+            <>
+              <button
+                onClick={handleBuy}
+                disabled={loading || !userLoaded}
+                className="btn btn-primary"
+                style={{ width: '100%', opacity: (loading || !userLoaded) ? 0.7 : 1 }}
+              >
                 {loading ? 'Redirecting to checkout…' : 'Buy Access — $100'}
               </button>
               {error && <p style={{ color: '#dc2626', fontSize: '0.82rem', marginTop: '0.5rem', textAlign: 'center' }}>{error}</p>}
-              {!user && (
-                <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.75rem' }}>
-                  You&apos;ll be asked to log in or create an account first.
-                </p>
-              )}
+              <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#9aa5b0', marginTop: '0.75rem' }}>
+                No account required. Pay and get instant access.
+              </p>
             </>
           )}
         </div>
@@ -166,6 +223,7 @@ export default function PricingPage() {
           <FAQ q="What counts as an approved submission?" a="You fill out the salary form completely and honestly. We review each submission for completeness before approving it. Most submissions are approved within 24–48 hours." />
           <FAQ q="Does my $100 renew automatically?" a="No. It is a one-time payment. After 12 months your access expires. You can purchase again at that time if you'd like to continue." />
           <FAQ q="Is my salary data really anonymous?" a="Yes. We collect no name, NPI, or any identifying information. Only your specialty, hospital name, city, state, and compensation details are stored." />
+          <FAQ q="Do I need to create an account to buy?" a="No. Just enter your email at checkout. After payment, we'll send you a link to set up your password and access your account." />
         </div>
       </div>
     </div>
