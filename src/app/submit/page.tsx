@@ -1,0 +1,741 @@
+'use client'
+
+import { useState } from 'react'
+
+// ── Constants ────────────────────────────────────────────────────────────────
+
+const US_STATES = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
+  'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
+  'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+  'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+  'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma',
+  'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+  'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
+  'West Virginia', 'Wisconsin', 'Wyoming', 'Washington D.C.',
+]
+
+const SPECIALTIES = [
+  'Academic General Pediatrician',
+  'Adolescent Medicine Specialist',
+  'Child Abuse Pediatrician',
+  'Child and Adolescent Psychiatrist',
+  'Child Neurologist',
+  'Clinical Informatics Specialist (Pediatric)',
+  'Developmental-Behavioral Pediatrician',
+  'General Pediatrician',
+  'Neonatologist',
+  'Neurodevelopmental Disabilities Pediatrician',
+  'Pediatric Allergist / Immunologist',
+  'Pediatric Anesthesiologist',
+  'Pediatric Cardiologist',
+  'Pediatric Cardiothoracic Surgeon',
+  'Pediatric Critical Care Specialist (Intensivist)',
+  'Pediatric Dermatologist',
+  'Pediatric Emergency Medicine Physician',
+  'Pediatric Endocrinologist',
+  'Pediatric Gastroenterologist',
+  'Pediatric General Surgeon',
+  'Pediatric Hematologist-Oncologist',
+  'Pediatric Hospitalist',
+  'Pediatric Infectious Diseases Specialist',
+  'Pediatric Medical Geneticist',
+  'Pediatric Medical Toxicologist',
+  'Pediatric Nephrologist',
+  'Pediatric Neurosurgeon',
+  'Pediatric Ophthalmologist',
+  'Pediatric Orthopedic Surgeon',
+  'Pediatric Otolaryngologist (ENT)',
+  'Pediatric Pain Medicine Specialist',
+  'Pediatric Palliative Care Specialist',
+  'Pediatric Pathologist',
+  'Pediatric Physiatrist (Rehabilitation Medicine)',
+  'Pediatric Plastic Surgeon',
+  'Pediatric Pulmonologist',
+  'Pediatric Radiologist',
+  'Pediatric Rheumatologist',
+  'Pediatric Sleep Medicine Specialist',
+  'Pediatric Sports Medicine Specialist',
+  'Pediatric Transplant Hepatologist',
+  'Pediatric Urgent Care Physician',
+  'Pediatric Urologist',
+]
+
+const YEARS_IN_ROLE = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10 - 15', '16 - 20', '20+']
+
+// ⚠️  TODO: Replace these with the actual Practice Setting options from your Google Form screenshot
+const PRACTICE_SETTINGS = [
+  'Academic Medical Center / Children\'s Hospital',
+  'Community Hospital',
+  'Private Practice (Solo)',
+  'Private Practice (Group)',
+  'Federally Qualified Health Center (FQHC)',
+  'Urgent Care / Retail Clinic',
+  'Telehealth',
+  'Other',
+]
+
+const SECTIONS = [
+  'Demographics & Location',
+  'Specialty & Role',
+  'Compensation',
+  'Workload & "Real Hourly Rate" Context',
+  'Financial Environment',
+  'Conclusion',
+]
+
+// ── Form state type ───────────────────────────────────────────────────────────
+
+type FormData = {
+  // Section 1
+  hospitalName: string
+  city: string
+  state: string
+  rating: string
+  // Section 2
+  specialty: string
+  careerStage: string
+  // Section 3
+  annualBaseSalary: string
+  receivedSignOnBonus: string
+  signOnBonusAmount: string
+  productivityBonus: string
+  hasMoonlighting: string
+  moonlightingIncome: string
+  // Section 4
+  fteStatus: string
+  avgClinicalHoursPerWeek: string
+  callFrequency: string
+  yearsInRole: string
+  // Section 5
+  pslfEligible: string
+  practiceSetting: string
+  housingStipend: string
+  programUnionized: string
+  // Section 6
+  additionalComments: string
+  // honeypot
+  website: string
+}
+
+const INITIAL: FormData = {
+  hospitalName: '',
+  city: '',
+  state: '',
+  rating: '',
+  specialty: '',
+  careerStage: '',
+  annualBaseSalary: '',
+  receivedSignOnBonus: '',
+  signOnBonusAmount: '',
+  productivityBonus: '',
+  hasMoonlighting: '',
+  moonlightingIncome: '',
+  fteStatus: '',
+  avgClinicalHoursPerWeek: '',
+  callFrequency: '',
+  yearsInRole: '',
+  pslfEligible: '',
+  practiceSetting: '',
+  housingStipend: '',
+  programUnionized: '',
+  additionalComments: '',
+  website: '',
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
+export default function SubmitPage() {
+  const [step, setStep] = useState(0) // 0-indexed
+  const [form, setForm] = useState<FormData>(INITIAL)
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [serverError, setServerError] = useState('')
+
+  const totalSteps = SECTIONS.length
+  const progress = ((step + 1) / totalSteps) * 100
+
+  function set(field: keyof FormData, value: string) {
+    setForm(f => ({ ...f, [field]: value }))
+    if (errors[field]) setErrors(e => ({ ...e, [field]: '' }))
+  }
+
+  function validateStep(): boolean {
+    const e: Partial<Record<keyof FormData, string>> = {}
+
+    if (step === 0) {
+      if (!form.hospitalName.trim()) e.hospitalName = 'Required'
+      if (!form.city.trim()) e.city = 'Required'
+      if (!form.state) e.state = 'Required'
+      if (!form.rating) e.rating = 'Required'
+    }
+
+    if (step === 1) {
+      if (!form.specialty) e.specialty = 'Required'
+      if (!form.careerStage) e.careerStage = 'Required'
+    }
+
+    if (step === 2) {
+      if (!form.annualBaseSalary.trim()) e.annualBaseSalary = 'Required'
+      if (!form.receivedSignOnBonus) e.receivedSignOnBonus = 'Required'
+      if (!form.productivityBonus) e.productivityBonus = 'Required'
+      if (!form.hasMoonlighting) e.hasMoonlighting = 'Required'
+    }
+
+    if (step === 3) {
+      if (!form.fteStatus) e.fteStatus = 'Required'
+      if (!form.yearsInRole) e.yearsInRole = 'Required'
+    }
+
+    if (step === 4) {
+      if (!form.practiceSetting) e.practiceSetting = 'Required'
+    }
+
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  function next() {
+    if (validateStep()) {
+      setStep(s => Math.min(s + 1, totalSteps - 1))
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  function back() {
+    setStep(s => Math.max(s - 1, 0))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  async function handleSubmit() {
+    if (!validateStep()) return
+    setSubmitting(true)
+    setServerError('')
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+
+      if (!res.ok) {
+        setServerError(data.error || 'Something went wrong. Please try again.')
+        setSubmitting(false)
+        return
+      }
+
+      setSubmitted(true)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch {
+      setServerError('Network error. Please try again.')
+      setSubmitting(false)
+    }
+  }
+
+  if (submitted) return <SuccessScreen />
+
+  return (
+    <div style={{ maxWidth: '680px', margin: '0 auto', padding: '2rem 1.25rem 4rem' }}>
+      {/* Page title */}
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, color: '#1a2332', letterSpacing: '-0.01em' }}>
+          Pediatrician Salary Database
+        </h1>
+        <p style={{ color: '#5a6a7a', marginTop: '0.5rem', fontSize: '0.95rem' }}>
+          All submissions are anonymous and reviewed before publishing.
+        </p>
+        <p style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.5rem', fontWeight: 500 }}>
+          * Indicates required question
+        </p>
+      </div>
+
+      {/* Progress */}
+      <div style={{ marginBottom: '1.5rem' }}>
+        <div className="progress-bar-track">
+          <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.4rem' }}>
+          <span style={{ fontSize: '0.8rem', color: '#5a6a7a', fontWeight: 500 }}>
+            Page {step + 1} of {totalSteps}
+          </span>
+          <span style={{ fontSize: '0.8rem', color: '#1e5f8e', fontWeight: 600 }}>
+            {SECTIONS[step]}
+          </span>
+        </div>
+      </div>
+
+      {/* Section header */}
+      <div className="section-header" style={{ marginBottom: 0 }}>
+        Section {step + 1}: {SECTIONS[step]}
+      </div>
+
+      {/* Form body */}
+      <div style={{
+        backgroundColor: 'white',
+        border: '1px solid #d0dde8',
+        borderTop: 'none',
+        borderRadius: '0 0 12px 12px',
+        padding: '1.5rem',
+        marginBottom: '1.5rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem',
+      }}>
+
+        {/* Honeypot — hidden from humans */}
+        <input
+          type="text"
+          name="website"
+          value={form.website}
+          onChange={e => set('website', e.target.value)}
+          style={{ display: 'none' }}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+
+        {step === 0 && <Step1 form={form} errors={errors} set={set} />}
+        {step === 1 && <Step2 form={form} errors={errors} set={set} />}
+        {step === 2 && <Step3 form={form} errors={errors} set={set} />}
+        {step === 3 && <Step4 form={form} errors={errors} set={set} />}
+        {step === 4 && <Step5 form={form} errors={errors} set={set} />}
+        {step === 5 && <Step6 form={form} errors={errors} set={set} />}
+      </div>
+
+      {serverError && (
+        <div style={{
+          backgroundColor: '#fef2f2',
+          border: '1px solid #fca5a5',
+          borderRadius: '8px',
+          padding: '0.875rem 1rem',
+          color: '#dc2626',
+          fontSize: '0.9rem',
+          marginBottom: '1rem',
+        }}>
+          {serverError}
+        </div>
+      )}
+
+      {/* Navigation */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {step > 0 && (
+          <button onClick={back} className="btn btn-ghost" style={{ padding: '0.625rem 1.25rem' }}>
+            Back
+          </button>
+        )}
+        {step < totalSteps - 1 ? (
+          <button onClick={next} className="btn btn-secondary" style={{ padding: '0.625rem 1.5rem' }}>
+            Next
+          </button>
+        ) : (
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className="btn btn-primary"
+            style={{ padding: '0.625rem 1.75rem', opacity: submitting ? 0.7 : 1 }}
+          >
+            {submitting ? 'Submitting…' : 'Submit'}
+          </button>
+        )}
+        <button
+          onClick={() => {
+            setForm(INITIAL)
+            setStep(0)
+            setErrors({})
+          }}
+          style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#1e5f8e', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 500 }}
+        >
+          Clear form
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ── Step components ───────────────────────────────────────────────────────────
+
+type StepProps = {
+  form: FormData
+  errors: Partial<Record<keyof FormData, string>>
+  set: (field: keyof FormData, value: string) => void
+}
+
+function Step1({ form, errors, set }: StepProps) {
+  return (
+    <>
+      <FormField label="Name of Hospital / Institution" required error={errors.hospitalName}>
+        <input
+          type="text"
+          className={`form-input${errors.hospitalName ? ' error' : ''}`}
+          placeholder="Your answer"
+          value={form.hospitalName}
+          onChange={e => set('hospitalName', e.target.value)}
+        />
+      </FormField>
+
+      <FormField label="City" required error={errors.city}>
+        <input
+          type="text"
+          className={`form-input${errors.city ? ' error' : ''}`}
+          placeholder="Your answer"
+          value={form.city}
+          onChange={e => set('city', e.target.value)}
+        />
+      </FormField>
+
+      <FormField label="State" required error={errors.state}>
+        <select
+          className={`form-select${errors.state ? ' error' : ''}`}
+          value={form.state}
+          onChange={e => set('state', e.target.value)}
+        >
+          <option value="">Choose</option>
+          {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </FormField>
+
+      <FormField label="Rating of working at this hospital" required error={errors.rating}>
+        <div className="radio-group">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+            <label key={n} className="radio-option">
+              <input
+                type="radio"
+                name="rating"
+                value={String(n)}
+                checked={form.rating === String(n)}
+                onChange={() => set('rating', String(n))}
+              />
+              {n}
+            </label>
+          ))}
+        </div>
+        <div style={{ fontSize: '0.8rem', color: '#5a6a7a', marginTop: '0.25rem' }}>
+          1 = Worst · 10 = Best
+        </div>
+      </FormField>
+    </>
+  )
+}
+
+function Step2({ form, errors, set }: StepProps) {
+  return (
+    <>
+      <FormField label="Pediatrician Position / Specialty" required error={errors.specialty}>
+        <select
+          className={`form-select${errors.specialty ? ' error' : ''}`}
+          value={form.specialty}
+          onChange={e => set('specialty', e.target.value)}
+        >
+          <option value="">Choose</option>
+          {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </FormField>
+
+      <FormField label="Current Career Stage" required error={errors.careerStage}>
+        <div className="radio-group">
+          {['Resident', 'Fellow', 'Attending'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="careerStage"
+                value={opt}
+                checked={form.careerStage === opt}
+                onChange={() => set('careerStage', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+    </>
+  )
+}
+
+function Step3({ form, errors, set }: StepProps) {
+  return (
+    <>
+      <FormField label="Annual Base Salary/Stipend" required error={errors.annualBaseSalary}>
+        <input
+          type="text"
+          className={`form-input${errors.annualBaseSalary ? ' error' : ''}`}
+          placeholder="Your answer"
+          value={form.annualBaseSalary}
+          onChange={e => set('annualBaseSalary', e.target.value)}
+        />
+      </FormField>
+
+      <FormField label="Did you receive a Sign-on or Relocation Bonus?" required error={errors.receivedSignOnBonus}>
+        <div className="radio-group">
+          {['Yes', 'No'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="receivedSignOnBonus"
+                value={opt}
+                checked={form.receivedSignOnBonus === opt}
+                onChange={() => set('receivedSignOnBonus', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+
+      <FormField label="If Yes: How much?">
+        <input
+          type="text"
+          className="form-input"
+          placeholder="Your answer"
+          value={form.signOnBonusAmount}
+          onChange={e => set('signOnBonusAmount', e.target.value)}
+        />
+      </FormField>
+
+      <FormField label="Are you eligible for Productivity or Incentive Bonuses?" required error={errors.productivityBonus}>
+        <div className="radio-group">
+          {['Yes - RVU based', 'Yes - Quality based', 'No'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="productivityBonus"
+                value={opt}
+                checked={form.productivityBonus === opt}
+                onChange={() => set('productivityBonus', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+
+      <FormField label="Do you have Moonlighting or Side-gig income options?" required error={errors.hasMoonlighting}>
+        <div className="radio-group">
+          {['Yes', 'No'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="hasMoonlighting"
+                value={opt}
+                checked={form.hasMoonlighting === opt}
+                onChange={() => set('hasMoonlighting', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+
+      <FormField label="If Yes: Approximate annual moonlighting income?">
+        <input
+          type="text"
+          className="form-input"
+          placeholder="Your answer"
+          value={form.moonlightingIncome}
+          onChange={e => set('moonlightingIncome', e.target.value)}
+        />
+      </FormField>
+    </>
+  )
+}
+
+function Step4({ form, errors, set }: StepProps) {
+  return (
+    <>
+      <FormField label="FTE Status" required error={errors.fteStatus}>
+        <div className="radio-group">
+          {['1.0 Full Time', '<1.0 Part Time'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="fteStatus"
+                value={opt}
+                checked={form.fteStatus === opt}
+                onChange={() => set('fteStatus', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+
+      <FormField label="Average Clinical Hours Per Week">
+        <input
+          type="text"
+          className="form-input"
+          placeholder="Your answer"
+          value={form.avgClinicalHoursPerWeek}
+          onChange={e => set('avgClinicalHoursPerWeek', e.target.value)}
+        />
+      </FormField>
+
+      <FormField label="Call Frequency">
+        <input
+          type="text"
+          className="form-input"
+          placeholder="Your answer"
+          value={form.callFrequency}
+          onChange={e => set('callFrequency', e.target.value)}
+        />
+      </FormField>
+
+      <FormField label="Total Years Working in this Role" required error={errors.yearsInRole}>
+        <select
+          className={`form-select${errors.yearsInRole ? ' error' : ''}`}
+          value={form.yearsInRole}
+          onChange={e => set('yearsInRole', e.target.value)}
+        >
+          <option value="">Choose</option>
+          {YEARS_IN_ROLE.map(y => <option key={y} value={y}>{y}</option>)}
+        </select>
+      </FormField>
+    </>
+  )
+}
+
+function Step5({ form, errors, set }: StepProps) {
+  return (
+    <>
+      <FormField label="Is this position PSLF Eligible?">
+        <div className="radio-group">
+          {['Yes', 'No', 'Unsure'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="pslfEligible"
+                value={opt}
+                checked={form.pslfEligible === opt}
+                onChange={() => set('pslfEligible', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+
+      <FormField label="Practice Setting" required error={errors.practiceSetting}>
+        <select
+          className={`form-select${errors.practiceSetting ? ' error' : ''}`}
+          value={form.practiceSetting}
+          onChange={e => set('practiceSetting', e.target.value)}
+        >
+          <option value="">Choose</option>
+          {PRACTICE_SETTINGS.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </FormField>
+
+      <FormField label="(For Residents/Fellows Only) Do you receive a Housing Stipend?">
+        <div className="radio-group">
+          {['Yes', 'No'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="housingStipend"
+                value={opt}
+                checked={form.housingStipend === opt}
+                onChange={() => set('housingStipend', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+
+      <FormField label="(For Residents/Fellows Only) Is your program Unionized?">
+        <div className="radio-group">
+          {['Yes', 'No'].map(opt => (
+            <label key={opt} className="radio-option">
+              <input
+                type="radio"
+                name="programUnionized"
+                value={opt}
+                checked={form.programUnionized === opt}
+                onChange={() => set('programUnionized', opt)}
+              />
+              {opt}
+            </label>
+          ))}
+        </div>
+      </FormField>
+    </>
+  )
+}
+
+function Step6({ form, errors: _errors, set }: StepProps) {
+  return (
+    <>
+      <FormField label="Additional Comments">
+        <textarea
+          className="form-textarea"
+          placeholder="Your answer"
+          value={form.additionalComments}
+          onChange={e => set('additionalComments', e.target.value)}
+          rows={5}
+        />
+      </FormField>
+    </>
+  )
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function FormField({
+  label,
+  required,
+  error,
+  children,
+}: {
+  label: string
+  required?: boolean
+  error?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div>
+      <label style={{
+        display: 'block',
+        fontWeight: 600,
+        fontSize: '0.975rem',
+        color: '#1a2332',
+        marginBottom: '0.75rem',
+      }}>
+        {label}
+        {required && <span style={{ color: '#dc2626', marginLeft: '0.25rem' }}>*</span>}
+      </label>
+      {children}
+      {error && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.375rem',
+          marginTop: '0.5rem',
+          color: '#dc2626',
+          fontSize: '0.85rem',
+        }}>
+          <span>⚠</span> {error}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function SuccessScreen() {
+  return (
+    <div style={{ maxWidth: '560px', margin: '4rem auto', padding: '0 1.25rem', textAlign: 'center' }}>
+      <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1a2332', marginBottom: '0.75rem' }}>
+        Thank you for submitting!
+      </h1>
+      <p style={{ color: '#5a6a7a', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '2rem' }}>
+        Your salary data has been received and will be reviewed before being added to the database.
+        Every submission helps pediatricians across the country negotiate better compensation.
+      </p>
+      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <a href="/salaries" className="btn btn-secondary">Browse Salaries</a>
+        <a href="/" className="btn btn-ghost">Back to Home</a>
+      </div>
+    </div>
+  )
+}

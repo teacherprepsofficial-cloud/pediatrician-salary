@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary:       #1e5f8e;
+  --color-primary-dark:  #164a6e;
+  --color-primary-light: #e8f1f8;
+  --color-accent:        #e8a020;
+  --color-accent-dark:   #c8880a;
+  --color-accent-light:  #fef3dc;
+  --color-bg:            #f0f5fa;
+  --color-card-bg:       #ffffff;
+  --color-card-border:   #d0dde8;
+  --color-text-primary:  #1a2332;
+  --color-text-muted:    #5a6a7a;
+  --color-success:       #16a34a;
+  --color-error:         #dc2626;
+
+  --font-sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 16px;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  min-height: 48px;
+  cursor: pointer;
+  touch-action: manipulation;
+  letter-spacing: 0.01em;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #1a2332;
+  border: 2px solid var(--color-accent);
+}
+.btn-primary:hover {
+  background-color: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-primary);
+  color: white;
+  border: 2px solid var(--color-primary);
+}
+.btn-secondary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+.btn-outline:hover {
+  background-color: var(--color-primary-light);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-card-border);
+}
+.btn-ghost:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+/* ── Cards ───────────────────────────────────────────── */
+.card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(30, 95, 142, 0.10);
+}
+
+/* ── Section headers (purple-style from Google Form, translated to our blue) */
+.section-header {
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 12px 12px 0 0;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* ── Form elements ───────────────────────────────────── */
+.form-input {
+  width: 100%;
+  border: 1px solid var(--color-card-border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background-color: white;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 95, 142, 0.15);
+}
+
+.form-input.error {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.form-select {
+  width: 100%;
+  border: 1px solid var(--color-card-border);
+  border-radius: 6px;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background-color: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%235a6a7a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 95, 142, 0.15);
+}
+
+.form-select.error {
+  border-color: var(--color-error);
+}
+
+.form-textarea {
+  width: 100%;
+  border: 1px solid var(--color-card-border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background-color: white;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 95, 142, 0.15);
+}
+
+/* ── Radio buttons ───────────────────────────────────── */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  padding: 0.25rem 0;
+}
+
+.radio-option input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid #aab8c4;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+}
+
+.radio-option input[type="radio"]:checked {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  box-shadow: inset 0 0 0 3px white;
+}
+
+.radio-option input[type="radio"]:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 3px white, 0 0 0 3px rgba(30, 95, 142, 0.25);
+}
+
+/* ── Progress bar ────────────────────────────────────── */
+.progress-bar-track {
+  width: 100%;
+  height: 6px;
+  background-color: #d0dde8;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* ── Stat card ───────────────────────────────────────── */
+.stat-card {
+  background-color: white;
+  border: 1px solid var(--color-card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* ── Salary card ─────────────────────────────────────── */
+.salary-card {
+  background-color: white;
+  border: 1px solid var(--color-card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.salary-card:hover {
+  box-shadow: 0 4px 16px rgba(30, 95, 142, 0.12);
+  border-color: #b0c8dc;
+}
+
+@media (hover: none) {
+  .btn:hover { opacity: 1; }
+  .salary-card:hover { box-shadow: none; }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  footer { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+}
