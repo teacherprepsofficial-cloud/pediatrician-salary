@@ -7,12 +7,15 @@ function isAuthorized(request: Request): boolean {
   return secret === process.env.ADMIN_SECRET
 }
 
-// GET /api/admin/submissions — list pending submissions
+// GET /api/admin/submissions?status=pending|approved|rejected|all
 export async function GET(request: Request) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   await connectDB()
-  const submissions = await Submission.find({ status: 'pending' }).sort({ submittedAt: -1 }).lean()
+  const { searchParams } = new URL(request.url)
+  const status = searchParams.get('status') || 'pending'
+  const query = status === 'all' ? {} : { status }
+  const submissions = await Submission.find(query).sort({ submittedAt: -1 }).lean()
   return NextResponse.json({ submissions })
 }
