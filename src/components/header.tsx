@@ -56,6 +56,7 @@ export function Header() {
         {/* Desktop nav */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }} className="hidden-mobile">
           <NavLink href="/salaries">Browse Salaries</NavLink>
+          <NavLink href="/pricing">Pricing</NavLink>
           <NavLink href="/about">About</NavLink>
 
           {user ? (
@@ -177,6 +178,7 @@ export function Header() {
           gap: '0.25rem', boxShadow: '0 8px 24px rgba(30, 95, 142, 0.1)',
         }}>
           <MobileNavLink href="/salaries">Browse Salaries</MobileNavLink>
+          <MobileNavLink href="/pricing">Pricing</MobileNavLink>
           <MobileNavLink href="/about">About</MobileNavLink>
           {user ? (
             <>

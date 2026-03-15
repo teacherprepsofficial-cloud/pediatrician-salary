@@ -35,6 +35,7 @@ export function Footer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <FooterLink href="/salaries">Browse Salaries</FooterLink>
               <FooterLink href="/submit">Submit Your Salary</FooterLink>
+              <FooterLink href="/pricing">Pricing</FooterLink>
               <FooterLink href="/about">About</FooterLink>
             </div>
           </div>
