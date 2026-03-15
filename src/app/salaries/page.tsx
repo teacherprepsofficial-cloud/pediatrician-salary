@@ -217,7 +217,7 @@ export default function SalariesPage() {
         <div style={{ marginTop: '2rem', display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Proof label="100% Anonymous" />
           <Proof label="Pediatrician-Submitted" />
-          <Proof label="Reviewed & Verified" />
+          <Proof label="Reviewed & Approved" />
         </div>
       </div>
     )

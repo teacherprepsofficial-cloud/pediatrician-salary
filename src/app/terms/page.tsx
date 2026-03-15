@@ -6,7 +6,7 @@ export default function TermsPage() {
         <p><strong>Last updated:</strong> {new Date().getFullYear()}</p>
         <p>By using PediatricianSalary.com, you agree to these terms.</p>
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>Accuracy of Data</h2>
-        <p>Salary data is submitted by users and is not independently verified beyond basic review. We make no warranties regarding the accuracy or completeness of any salary information.</p>
+        <p>Salary data is submitted by users and is reviewed and approved before publishing, but not independently verified. We make no warranties regarding the accuracy or completeness of any salary information.</p>
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>Submissions</h2>
         <p>By submitting salary data, you confirm that the information is accurate to the best of your knowledge and that you are not submitting false or misleading information.</p>
         <h2 style={{ fontWeight: 700, color: '#1a2332' }}>No Professional Advice</h2>
